@@ -9,7 +9,7 @@
 class Object3dModel {
 public:
 	Object3dModel::Object3dModel(const char* filename,
-		aiMatrix4x4 convertMatrix,
+		ofMatrix4x4 convertMatrix,
 		float x,
 		float y,
 		float z,
@@ -25,9 +25,20 @@ public:
 
 private:
 	ofxAssimpModelLoader* model;
-	float localX, localY, localZ;
-	float qX, qY, qZ, qW;
-	float sX, sY, sZ, sW;
-	int r, g, b;
+	ofMatrix4x4 convertMatrix;
+	float localX;
+	float localY;
+	float localZ;
+	float qX;
+	float qY;
+	float qZ; 
+	float qW;
+	float sX;
+	float sY;
+	float sZ;
+	float sW;
+	int r;
+	int g;
+	int b;
 };
 

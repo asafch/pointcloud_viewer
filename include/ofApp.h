@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <unordered_map>
 #include <vector>
 
 #include <pcl/features/principal_curvatures.h>
@@ -21,6 +22,8 @@
 #define MAX_NUM_OF_CONCURRENT_CLOUDS 3
 #define CULTURALS_LIST "C:\\scans\\transformations\\TERRAIN_CULT.csv"
 
+using namespace std;
+
 typedef struct mpoints {
 	GLuint	 numberOfPoints;
 	GLfloat* points;
@@ -33,6 +36,7 @@ private:
 	//methods
 	enum STATUS_MOVE { GLOBAL = 0, LOCAL = 1 } statusMoveEnum;
 	void parseCulturals();
+	void parseTransformations();
 	void setup();
 	void update();
 	void draw();
@@ -74,11 +78,13 @@ private:
 	Camera camera;
 	ofRectangle viewport3D;
 	ObjectsLib* objects;
+	vector<string> transformationFiles;
+	unordered_map<string, ofMatrix4x4*> transformations;
 	vector<Cloud*> clouds;
 	vector<ofxLabel*> cloudNames;
 	vector<Cultural*> culturals;
 	ofxToggle filteredImage;
-	ofxToggle loadStlButton;
+	ofxButton loadStlButton;
 	ofxToggle bush;
 	ofxToggle tree;
 	ofxToggle lamppost;

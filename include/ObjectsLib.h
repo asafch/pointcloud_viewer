@@ -24,7 +24,7 @@ public:
 	void loadModels();
 
 private:
-	aiMatrix4x4 convertMatrix;
+	ofMatrix4x4 convertMatrix;
 	vector<Object3dModel*> models;
 	float cameraLocationX;
 	float cameraLocationY;

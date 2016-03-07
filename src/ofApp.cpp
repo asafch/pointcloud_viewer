@@ -62,17 +62,109 @@ void ofApp::parseCulturals() {
 		Cultural *cultural = new Cultural(name, translationX, translationY, translationZ, Q1, Q2, Q3, Q4, scaleX, scaleY, scaleZ);
 		culturals.push_back(cultural);
 	}
+	input.close();
+	cout << "Done." << endl;
+}
+
+void ofApp::parseTransformations() {
+	cout << "Parsing " << transformationFiles.size() << " transformation files..." << endl;
+	for (vector<string>::iterator file = transformationFiles.begin(); file != transformationFiles.end(); file++) {
+		ifstream input(*file);
+		if (!input.good()) {
+			cout << "Error: opening tansformation file" + *file << endl;
+			exit();
+		}
+		for (string line; getline(input, line);) {
+			string name;
+			float a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4;
+			size_t start = -1;
+			size_t end;
+			end = line.find(",", start + 1);
+			name = line.substr(0, end);
+			start = end + 1;
+			end = line.find(",", start + 1);
+			if (line.at(start) == 'W') {
+				continue;
+			}
+			start = end + 1;
+			end = line.find(",", start + 1);
+			a1 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			a2 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			a3 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			a4 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			b1 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			b2 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			b3 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			b4 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			c1 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			c2 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			c3 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			c4 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			d1 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			d2 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			d3 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			d4 = stof(line.substr(start, end - start));
+			start = end + 1;
+			end = line.find(",", start + 1);
+			ofMatrix4x4 *transformation = new ofMatrix4x4(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
+			transformations.emplace(name, transformation);
+		}
+		input.close();
+	}
 	cout << "Done." << endl;
 }
 
 void ofApp::setup() {
-	parseCulturals();
+	/*
+	* The vector 'transformationFiles' holds the paths to all the files that contain transformations for the scans.
+	* These file names are used in ofApp::parseTransformations() to enable the user flexibility to load whatever scan he chooses,
+	* so the clouds and respective STLs would be rendered in their respective world coordinates.
+	*/
+	transformationFiles.push_back("C:\\scans\\transformations\\Area1LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area2LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area4LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area5LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area6LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area7LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area8LaserVsWorld.csv");
+	//parseCulturals();
+	parseTransformations();
 	mouseTouch = false;
 	ofSetVerticalSync(true);
 	// we add this listener before setting up so the initial circle resolution is correct
 	//	circleResolution.addListener(this, &ofApp::circleResolutionChanged);
 	ofBackground(0);
-	//loadStlButton.addListener(this, &ofApp::loadStlFunction);
+	loadStlButton.addListener(this, &ofApp::loadStlFunction);
 	loadScanButton.addListener(this, &ofApp::loadScanFunction);
 	saveScanButton.addListener(this, &ofApp::saveScanFunction);
 	// Buttons::
@@ -95,11 +187,12 @@ void ofApp::setup() {
 	ofEnableSmoothing();
 	//ring.loadSound("ring.wav");
 	objects = new ObjectsLib(ofVec3f(3495.679, 2892.808, 15.74835), ofVec3f(-3.30E-02, -4.67E-02, 3.428114), ofVec3f(-1.42576, 2.28E-03, -1.04E-02), ofVec3f(-3.583694, -0.266352218, 3.6992804));
-	objects->loadModels();
 }
 
 void ofApp::loadStlFunction() {
-	cout << "kaki" << endl;
+	cout << "Loading STLs..." << endl;
+	objects->loadModels();
+	cout << "Done." << endl;
 }
 
 void ofApp::loadScanFunction() {
@@ -108,7 +201,13 @@ void ofApp::loadScanFunction() {
 		cout << "Loading file: " << filename << endl;
 		//deleteAllObject();
 		//load pcd or gz file
-		Cloud *cloud = new Cloud(filename);
+		string filenameAsString(filename);
+		size_t start = filenameAsString.find_last_of("\\");
+		size_t end = filenameAsString.find_last_of(".");
+		string justTheFile = filenameAsString.substr(start + 1, end - start - 1);
+		ofMatrix4x4 *laserToWorld(transformations.at(justTheFile));
+		Cloud *cloud = new Cloud(filename, laserToWorld);
+		aiMatrix4x4 mat = {};
 		clouds.push_back(cloud);
 		const size_t lengthFileName = strlen(filename);
 		//normals load
@@ -173,27 +272,20 @@ void ofApp::draw() {
 	glPointSize(pointSize);
 	camera.setFov(fov);
 	camera.setNearClip(2);
-	camera.setFarClip(600);
-	if (!(mouseTouch))
-		camera.setGlobalPosition(center);
-	//		ofEnableDepthTest();
-	//draw 3D objects
-	if (loadStlButton)
-		objects->draw();
-	//if (!(meshCloud))
-	//{
-	//	camera.end();
-	//	gui.draw();
-	//	return;
-	//}
-	ofPushMatrix();
+	camera.setFarClip(6000);
 	for (vector<Cloud*>::iterator cloud = clouds.begin(); cloud != clouds.end(); cloud++) {
+		ofPushMatrix();
+		ofMultMatrix(ofMatrix4x4::getTransposedOf((*cloud)->getLaserToWorld()));
+		if (!(mouseTouch))
+			camera.setGlobalPosition(center);
+		if (loadStlButton)
+			objects->draw();
 		if (filteredImage)
 			(*cloud)->getFilteredCloudMesh()->draw();
 		else
 			(*cloud)->getFullCloudMesh()->draw();
+		ofPopMatrix();
 	}
-	ofPopMatrix();
 	camera.end();
 	gui.draw();
 }
@@ -232,6 +324,9 @@ void ofApp::keyPressed(int key) {
 	}
 	if (key == ' ') {
 		color = ofColor(255);
+	}
+	if (key == 'a') {
+		drawAxis();
 	}
 
 }

@@ -1,6 +1,6 @@
 #include "../include/Cloud.h"
 
-Cloud::Cloud(const char *filename) : filename(filename) {
+Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld) : filename(filename), laserToWorld(*laserToWorld) {
 	fullCloud = *new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
 	filteredCloud = *new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
 	const size_t length = strlen(filename);
@@ -34,4 +34,8 @@ ofMesh* Cloud::getFullCloudMesh() {
 
 ofMesh* Cloud::getFilteredCloudMesh() {
 	return filteredCloudMesh;
+}
+
+ofMatrix4x4 Cloud::getLaserToWorld() {
+	return laserToWorld;
 }

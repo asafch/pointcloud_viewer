@@ -1,7 +1,7 @@
 #include "../include/Object3dModel.h"
 
 Object3dModel::Object3dModel(const char* filename,
-	aiMatrix4x4 convertMatrix,
+	ofMatrix4x4 convertMatrix,
 	float x,
 	float y,
 	float z,
@@ -15,10 +15,15 @@ Object3dModel::Object3dModel(const char* filename,
 	model = new ofxAssimpModelLoader();
 	model->setScaleNormalization(false);
 	model->loadModel(filename);
-	aiVector3D newXYZ = convertMatrix * aiVector3D(x, y, z);
-	localX = newXYZ.x;
-	localY = newXYZ.y;
-	localZ = newXYZ.z;
+	//this->convertMatrix = convertMatrix;
+	this->convertMatrix = convertMatrix.getTransposedOf(convertMatrix);
+	//aiVector3D newXYZ = convertMatrix * aiVector3D(x, y, z);
+	//localX = newXYZ.x;
+	//localY = newXYZ.y;
+	//localZ = newXYZ.z;
+	localX = x;
+	localY = y;
+	localZ = z;
 	qX = qx;
 	qY = qy;
 	qZ = qz;
@@ -39,13 +44,15 @@ Object3dModel::~Object3dModel() {
 void Object3dModel::draw() {
 	ofPushMatrix();
 	//ofLoadIdentityMatrix();
-	ofTranslate(localX, localY, localZ);
 	ofQuaternion qaut(qX, qY, qZ, qW);
-	ofVec3f qaxis; float qangle;
+	ofVec3f qaxis;
+	float qangle;
 	qaut.getRotate(qangle, qaxis);
+	model->setPosition(localX, localY, localZ);
 	model->setRotation(0, qangle, qaxis.x, qaxis.y, qaxis.z);
 	model->setScale(sX, sY, sZ);
 	ofSetColor(0, 200, 200, 156);
+	model->updateMatrix(convertMatrix);
 	model->drawFaces();
 	ofPopMatrix();
 }

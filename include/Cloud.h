@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofVec3f.h"
+#include "ofxAssimpModelLoader\src\ofxAssimpModelLoader.h"
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/common/common_headers.h>
@@ -14,12 +16,13 @@ ofMesh* pclNodesToPoints(pcl::PointCloud<pcl::PointXYZ>::Ptr vec);
 
 class Cloud {
 public:
-	Cloud(const char *filename);
+	Cloud(const char *filename, ofMatrix4x4 *laserToWorld);
 	~Cloud();
 	pcl::PointCloud<pcl::PointXYZ>::Ptr getFullCloud();
 	pcl::PointCloud<pcl::PointXYZ>::Ptr getFilteredCloud();
 	ofMesh* getFullCloudMesh();
 	ofMesh* getFilteredCloudMesh();
+	ofMatrix4x4 getLaserToWorld();
 
 private:
 	const char *filename;
@@ -27,4 +30,5 @@ private:
 	pcl::PointCloud<pcl::PointXYZ>::Ptr filteredCloud;
 	ofMesh* fullCloudMesh;
 	ofMesh* filteredCloudMesh;
+	ofMatrix4x4 laserToWorld;
 };
