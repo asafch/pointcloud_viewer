@@ -73,3 +73,18 @@ $(PCL_ROOT)\3rdParty\VTK\lib;
 ```
 
 6. Furthermore, the project should be launched from within VS2015 in `x64, Debug` configuration.
+
+7. Add to the file `$(OPEN_FRAMEWORKS)\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.h` the following method declaration:
+
+    `void updateMatrix(ofMatrix4x4 mat);`
+
+8. ...and add its implementation to the file `$(OPEN_FRAMEWORKS)\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.cpp`:
+
+```
+void ofxAssimpModelLoader::updateMatrix(ofMatrix4x4 mat) {
+	modelMatrix.makeFromMultiplicationOf(modelMatrix, mat);
+}
+```
+
+## Credits
+The app is based on [Natan Elul](mailto:eluln@post.bgu.ac.il )'s original project, with assistance from [Fanglin Gu](mailto:gfl699468@gmail.com).

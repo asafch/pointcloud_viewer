@@ -7,6 +7,8 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/common/common_headers.h>
 
+#include "Cultural.h"
+#include "Object3dModel.h"
 #include "PclMethods.h"
 
 #define FILTER_PROB 95
@@ -23,11 +25,14 @@ public:
 	ofMesh* getFullCloudMesh();
 	ofMesh* getFilteredCloudMesh();
 	ofMatrix4x4 getLaserToWorld();
+	void addcultural(Cultural *cultural);
+	void drawculturals();
 
 private:
 	const char *filename;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr fullCloud;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr filteredCloud;
+	vector<Cultural*> culturals;
 	ofMesh* fullCloudMesh;
 	ofMesh* filteredCloudMesh;
 	ofMatrix4x4 laserToWorld;

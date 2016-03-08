@@ -60,11 +60,11 @@ pcl::PointIndices::Ptr filterAroundPointCloud(pcl::PointCloud<pcl::PointXYZ>::Pt
 }
 
 //assuming after filter are empty
-bool filterByProbality(pcl::PointCloud<pcl::PointXYZ>::Ptr basic, pcl::PointCloud<pcl::PointXYZ>::Ptr afterFilter, double threshold)
+bool filterByProbability(pcl::PointCloud<pcl::PointXYZ>::Ptr basic, pcl::PointCloud<pcl::PointXYZ>::Ptr afterFilter, double threshold)
 {
 			
 	cout << endl;
-	cout << "filtering by probality above " <<  threshold << endl;
+	cout << "Filtering by probability above " <<  threshold << endl;
 
 	int precent = 0;
 	size_t DivTen = basic->points.size() / 10;

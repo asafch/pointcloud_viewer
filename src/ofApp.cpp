@@ -19,7 +19,7 @@ void ofApp::parseCulturals() {
 		cout << "Error: opening culturals list" << endl;
 		exit();
 	}
-	//the first line in the file is junk, so parse it out
+	//the first line in the file is just column titles, so parse it out
 	string line;
 	getline(input, line);
 	for (; getline(input, line);) {
@@ -83,6 +83,9 @@ void ofApp::parseTransformations() {
 			name = line.substr(0, end);
 			start = end + 1;
 			end = line.find(",", start + 1);
+			/*
+			If the line defines a 'WorldToLaser' transformation, ignore it.
+			*/
 			if (line.at(start) == 'W') {
 				continue;
 			}
@@ -164,7 +167,7 @@ void ofApp::setup() {
 	// we add this listener before setting up so the initial circle resolution is correct
 	//	circleResolution.addListener(this, &ofApp::circleResolutionChanged);
 	ofBackground(0);
-	loadStlButton.addListener(this, &ofApp::loadStlFunction);
+	//loadStlButton.addListener(this, &ofApp::loadStlFunction);
 	loadScanButton.addListener(this, &ofApp::loadScanFunction);
 	saveScanButton.addListener(this, &ofApp::saveScanFunction);
 	// Buttons::
@@ -187,11 +190,12 @@ void ofApp::setup() {
 	ofEnableSmoothing();
 	//ring.loadSound("ring.wav");
 	objects = new ObjectsLib(ofVec3f(3495.679, 2892.808, 15.74835), ofVec3f(-3.30E-02, -4.67E-02, 3.428114), ofVec3f(-1.42576, 2.28E-03, -1.04E-02), ofVec3f(-3.583694, -0.266352218, 3.6992804));
+	//objects->loadModels();
 }
 
 void ofApp::loadStlFunction() {
 	cout << "Loading STLs..." << endl;
-	objects->loadModels();
+	
 	cout << "Done." << endl;
 }
 
@@ -279,7 +283,7 @@ void ofApp::draw() {
 		if (!(mouseTouch))
 			camera.setGlobalPosition(center);
 		if (loadStlButton)
-			objects->draw();
+			(*cloud)->drawModels();
 		if (filteredImage)
 			(*cloud)->getFilteredCloudMesh()->draw();
 		else

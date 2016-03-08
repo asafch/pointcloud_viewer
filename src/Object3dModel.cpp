@@ -34,7 +34,7 @@ Object3dModel::Object3dModel(const char* filename,
 	r = 60 + rand() % 20;
 	g = 60 + rand() % 100;
 	b = 60 + rand() % 100;
-	ofMesh mesh = model->getMesh(0);
+	//ofMesh mesh = model->getMesh(0);
 }
 
 Object3dModel::~Object3dModel() {
@@ -56,3 +56,4 @@ void Object3dModel::draw() {
 	model->drawFaces();
 	ofPopMatrix();
 }
+

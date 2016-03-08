@@ -8,7 +8,7 @@ Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld) : filename(filenam
 		pcl::io::loadPCDFile<pcl::PointXYZ>(filename, *fullCloud);
 	else
 		initTargetVer(filename, fullCloud);
-	filterByProbality(fullCloud, filteredCloud, FILTER_PROB);
+	filterByProbability(fullCloud, filteredCloud, FILTER_PROB);
 	printf("Inserting to mesh...\n");
 	fullCloudMesh = pclNodesToPoints(fullCloud);
 	filteredCloudMesh = pclNodesToPoints(filteredCloud);
@@ -38,4 +38,15 @@ ofMesh* Cloud::getFilteredCloudMesh() {
 
 ofMatrix4x4 Cloud::getLaserToWorld() {
 	return laserToWorld;
+}
+
+
+void Cloud::addCultural(Cultural *cultural) {
+	culturals.push_back(cultural);
+}
+
+void Cloud::drawCulturals() {
+	for (vector<Cultural*>::iterator cultural = culturals.begin(); model != culturals.end(); cultural++) {
+		(*cultural)->draw();
+	}
 }

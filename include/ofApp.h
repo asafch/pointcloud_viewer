@@ -20,7 +20,7 @@
 
 #define NORMAL_RADIUS 0.01
 #define MAX_NUM_OF_CONCURRENT_CLOUDS 3
-#define CULTURALS_LIST "C:\\scans\\transformations\\TERRAIN_CULT.csv"
+#define CULTURALS_LIST "C:\\scans\\transformations\\ALL_CULT.csv"
 
 using namespace std;
 
@@ -84,7 +84,7 @@ private:
 	vector<ofxLabel*> cloudNames;
 	vector<Cultural*> culturals;
 	ofxToggle filteredImage;
-	ofxButton loadStlButton;
+	ofxToggle loadStlButton;
 	ofxToggle bush;
 	ofxToggle tree;
 	ofxToggle lamppost;

@@ -19,7 +19,7 @@ using namespace std;
 
 pcl::PointIndices::Ptr filterDueCoefficients(pcl::PointCloud<pcl::PointXYZ>::Ptr basis,  pcl::ModelCoefficients::Ptr coefficients);
 pcl::PointIndices::Ptr filterAroundPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr basis, pcl::PointCloud<pcl::PointXYZ>::Ptr point, double radius);
-bool filterByProbality(pcl::PointCloud<pcl::PointXYZ>::Ptr basic, pcl::PointCloud<pcl::PointXYZ>::Ptr afterFilter, double threshold);
+bool filterByProbability(pcl::PointCloud<pcl::PointXYZ>::Ptr basic, pcl::PointCloud<pcl::PointXYZ>::Ptr afterFilter, double threshold);
 bool filterByVoxelGrid(pcl::PointCloud<pcl::PointXYZ>::Ptr basic, pcl::PointCloud<pcl::PointXYZ>::Ptr afterFilter);
 void segmentPlaneFromPointcloud(pcl::PointCloud<pcl::PointXYZ>::Ptr basic_cloud_ptr, pcl::PointIndices::Ptr inliers, pcl::ModelCoefficients::Ptr coefficients);
 double  relateNearGrad(int i, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, pcl::PointCloud<pcl::Normal>::Ptr normals, double radius_distance, pcl::KdTreeFLANN<pcl::PointXYZ>& kdtree);
