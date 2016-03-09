@@ -9,16 +9,16 @@ Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld) : filename(filenam
 	else
 		initTargetVer(filename, fullCloud);
 	filterByProbability(fullCloud, filteredCloud, FILTER_PROB);
-	printf("Inserting to mesh...\n");
+	cout << "Inserting to mesh..." << endl;
 	fullCloudMesh = pclNodesToPoints(fullCloud);
 	filteredCloudMesh = pclNodesToPoints(filteredCloud);
-	printf("Done.\n");
+	cout << "Done." << endl;
 }
 
 Cloud::~Cloud() {
 	fullCloud->clear();
 	filteredCloud->clear();
-}
+} 
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr Cloud::getFullCloud() {
 	return fullCloud;
@@ -41,12 +41,25 @@ ofMatrix4x4 Cloud::getLaserToWorld() {
 }
 
 
-void Cloud::addCultural(Cultural *cultural) {
-	culturals.push_back(cultural);
+void Cloud::addModel(Cultural* cultural) {
+	ofVec3f a = cultural->getCenter();
+	ofVec3f b = getCloudGlobalCenter();
+	float f = a.distance(b);
+	ofMatrix4x4 mat = laserToWorld.getInverse();
+	if (f < CLOUD_CULTURAL_MAX_DISTANCE) {
+		models.push_back(new Object3dModel(cultural->getName(), mat, cultural->getTranslation(), cultural->getRotation(), cultural->getScale()));
+	}
 }
 
-void Cloud::drawCulturals() {
-	for (vector<Cultural*>::iterator cultural = culturals.begin(); model != culturals.end(); cultural++) {
-		(*cultural)->draw();
+void Cloud::drawModels() {
+	for (vector<Object3dModel*>::iterator model = models.begin(); model != models.end(); model++) {
+		(*model)->draw();
 	}
+}
+
+ofVec3f& Cloud::getCloudGlobalCenter() {
+	float x = laserToWorld._mat[0][3];
+	float y = laserToWorld._mat[1][3];
+	float z = laserToWorld._mat[2][3];
+	return ofVec3f(x, y, z);
 }

@@ -1,39 +1,36 @@
 #include "../include/Object3dModel.h"
 
-Object3dModel::Object3dModel(const char* filename,
-	ofMatrix4x4 convertMatrix,
-	float x,
-	float y,
-	float z,
-	float qx,
-	float qy,
-	float qz,
-	float qw,
-	float sx,
-	float sy,
-	float sz) {
+Object3dModel::Object3dModel(string filename,
+							ofMatrix4x4 convertMatrix,
+							ofVec3f translation,
+							ofVec4f rotation,
+							ofVec3f scale) {
 	model = new ofxAssimpModelLoader();
 	model->setScaleNormalization(false);
-	model->loadModel(filename);
+	size_t start = filename.rfind("_");
+	size_t end = start;
+	start = filename.rfind("_", start - 1) + 1;
+	string ok = PATH_PREFIX + filename.substr(start, end - start) + PATH_SUFFIX;
+	model->loadModel(ok);
 	//this->convertMatrix = convertMatrix;
 	this->convertMatrix = convertMatrix.getTransposedOf(convertMatrix);
 	//aiVector3D newXYZ = convertMatrix * aiVector3D(x, y, z);
 	//localX = newXYZ.x;
 	//localY = newXYZ.y;
 	//localZ = newXYZ.z;
-	localX = x;
-	localY = y;
-	localZ = z;
-	qX = qx;
-	qY = qy;
-	qZ = qz;
-	qW = qw;
-	sX = sx;
-	sY = sy;
-	sZ = sz;
-	r = 60 + rand() % 20;
-	g = 60 + rand() % 100;
-	b = 60 + rand() % 100;
+	localX = translation[0];
+	localY = translation[1];
+	localZ = translation[2];
+	qX = rotation[0];
+	qY = rotation[1];
+	qZ = rotation[2];
+	qW = rotation[3];
+	sX = scale[0];
+	sY = scale[1];
+	sZ = scale[2];
+	//r = 60 + rand() % 20;
+	//g = 60 + rand() % 100;
+	//b = 60 + rand() % 100;
 	//ofMesh mesh = model->getMesh(0);
 }
 

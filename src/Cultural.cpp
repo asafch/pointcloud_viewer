@@ -28,3 +28,19 @@ Cultural::Cultural(string name,
 string& Cultural::getName() {
 	return name;
 }
+
+ofVec3f& Cultural::getCenter() {
+	return ofVec3f(translationX, translationY, translationZ);
+}
+
+ofVec3f& Cultural::getTranslation() {
+	return ofVec3f(translationX, translationY, translationZ);
+}
+
+ofVec4f& Cultural::getRotation() {
+	return ofVec4f(Q1, Q2, Q3, Q4);
+}
+
+ofVec3f& Cultural::getScale() {
+	return ofVec3f(scaleX, scaleY, scaleZ);
+}

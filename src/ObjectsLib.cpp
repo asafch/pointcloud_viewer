@@ -93,6 +93,6 @@ void ObjectsLib::loadModels() {
 }
 
 void ObjectsLib::addModel(const char* filename, float x, float y, float z, float qx, float qy, float qz, float qw, float sX, float sY, float sZ) {
-	Object3dModel* obj = new Object3dModel(filename, convertMatrix, x, y, z, qx, qy, qz, qw, sX, sY, sZ);
-	models.push_back(obj);
+	//Object3dModel* obj = new Object3dModel(filename, convertMatrix, x, y, z, qx, qy, qz, qw, sX, sY, sZ);
+	//models.push_back(obj);
 }

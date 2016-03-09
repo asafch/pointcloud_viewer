@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <vector>
 
 #include <pcl/common/common_headers.h>
@@ -6,20 +7,16 @@
 #include "ofVec3f.h"
 #include "ofxAssimpModelLoader\src\ofxAssimpModelLoader.h"
 
+#define PATH_PREFIX "C:\\scans\\culturals\\"
+#define PATH_SUFFIX ".stl"
+
 class Object3dModel {
 public:
-	Object3dModel::Object3dModel(const char* filename,
+	Object3dModel::Object3dModel(string filename,
 		ofMatrix4x4 convertMatrix,
-		float x,
-		float y,
-		float z,
-		float qx,
-		float qy,
-		float qz,
-		float qw,
-		float sx,
-		float sy,
-		float sz);
+		ofVec3f translation,
+		ofVec4f rotation,
+		ofVec3f scale);
 	~Object3dModel();
 	void draw();
 

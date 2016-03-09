@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "ofVec3f.h"
+
 using namespace std;
 
 class Cultural {
@@ -18,6 +20,10 @@ public:
 			float scaleY,
 			float scaleZ);
 	string& getName();
+	ofVec3f& getCenter();
+	ofVec3f& getTranslation();
+	ofVec4f& getRotation();
+	ofVec3f& getScale();
 
 private:
 	string name;

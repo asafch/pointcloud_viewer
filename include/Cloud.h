@@ -12,6 +12,7 @@
 #include "PclMethods.h"
 
 #define FILTER_PROB 95
+#define CLOUD_CULTURAL_MAX_DISTANCE 65.0
 
 void  initTargetVer(const char* filename, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 ofMesh* pclNodesToPoints(pcl::PointCloud<pcl::PointXYZ>::Ptr vec);
@@ -25,14 +26,15 @@ public:
 	ofMesh* getFullCloudMesh();
 	ofMesh* getFilteredCloudMesh();
 	ofMatrix4x4 getLaserToWorld();
-	void addcultural(Cultural *cultural);
-	void drawculturals();
+	void addModel(Cultural *cultural);
+	void drawModels();
+	ofVec3f& getCloudGlobalCenter();
 
 private:
 	const char *filename;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr fullCloud;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr filteredCloud;
-	vector<Cultural*> culturals;
+	vector<Object3dModel*> models;
 	ofMesh* fullCloudMesh;
 	ofMesh* filteredCloudMesh;
 	ofMatrix4x4 laserToWorld;
