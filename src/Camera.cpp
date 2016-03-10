@@ -68,7 +68,7 @@ void Camera::begin(ofRectangle viewport){
 void Camera::reset(){
 	target.resetTransform();
 	
-	target.setPosition(0,0, 0);
+	target.setPosition(0, 0, 0);
 	lookAt(target);
 	
 	resetTransform();

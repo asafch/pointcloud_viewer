@@ -57,6 +57,7 @@ private:
 	void loadStlFunction();
 	void loadScanFunction();
 	void saveScanFunction();
+	void updateFOVFunction();
 	void changeMode();
 	//ofMesh* meshFromCloudAndNormals(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, pcl::PointCloud<pcl::Normal>::Ptr normals, pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr principal_curvatures);
 	//fields

@@ -13,10 +13,10 @@ viewport.height = ofGetHeight();
 }
 
 void ofApp::parseCulturals() {
-	cout << "Parsing culturals..." << endl;
+	cout << "Parsing culturals...   ";
 	ifstream input(CULTURALS_LIST);
 	if (!input.good()) {
-		cout << "Error: opening culturals list" << endl;
+		cout << endl << "Error: opening culturals list" << endl;
 		exit();
 	}
 	//the first line in the file is just column titles, so parse it out
@@ -63,15 +63,15 @@ void ofApp::parseCulturals() {
 		culturals.push_back(cultural);
 	}
 	input.close();
-	cout << "Done." << endl;
+	cout << "Done: total of " << culturals.size() << " culturals." << endl;
 }
 
 void ofApp::parseTransformations() {
-	cout << "Parsing " << transformationFiles.size() << " transformation files..." << endl;
+	cout << "Parsing " << transformationFiles.size() << " transformation files...   ";
 	for (vector<string>::iterator file = transformationFiles.begin(); file != transformationFiles.end(); file++) {
 		ifstream input(*file);
 		if (!input.good()) {
-			cout << "Error: opening tansformation file" + *file << endl;
+			cout << endl << "Error: opening tansformation file" + *file << endl;
 			exit();
 		}
 		for (string line; getline(input, line);) {
@@ -144,7 +144,7 @@ void ofApp::parseTransformations() {
 		}
 		input.close();
 	}
-	cout << "Done." << endl;
+	cout << "Done: total of " << transformations.size() << " transformations." << endl;
 }
 
 void ofApp::setup() {
@@ -160,7 +160,7 @@ void ofApp::setup() {
 	transformationFiles.push_back("C:\\scans\\transformations\\Area6LaserVsWorld.csv");
 	transformationFiles.push_back("C:\\scans\\transformations\\Area7LaserVsWorld.csv");
 	transformationFiles.push_back("C:\\scans\\transformations\\Area8LaserVsWorld.csv");
-	parseCulturals();
+	//parseCulturals();
 	parseTransformations();
 	mouseTouch = false;
 	ofSetVerticalSync(true);
@@ -178,7 +178,8 @@ void ofApp::setup() {
 	gui.add(saveScanButton.setup("Save visible point cloud", false));
 	gui.add(fov.setup("FOV", 60, 0, 180));
 	gui.add(pointSize.setup("Point size", 1, 1, 10));
-	gui.add(center.setup("Coordinate", camera.getGlobalPosition(), ofVec3f(-100, -100, -100), ofVec3f(100, 100, 100)));
+	//camera.setPosition(3476, 2872, 18);
+	gui.add(center.setup("Coordinate", camera.getGlobalPosition(), ofVec3f(-5000, -5000, -5000), ofVec3f(5000, 5000, 5000)));
 	gui.add(filteredImage.setup("Filter image", false));
 	gui.add(loadStlButton.setup("Load STLs", false));
 	outputInfo = "Load scan";
@@ -191,10 +192,12 @@ void ofApp::setup() {
 	//ring.loadSound("ring.wav");
 	objects = new ObjectsLib(ofVec3f(3495.679, 2892.808, 15.74835), ofVec3f(-3.30E-02, -4.67E-02, 3.428114), ofVec3f(-1.42576, 2.28E-03, -1.04E-02), ofVec3f(-3.583694, -0.266352218, 3.6992804));
 	//objects->loadModels();
+	camera.setNearClip(2);
+	camera.setFarClip(6000);
 }
 
 void ofApp::loadStlFunction() {
-	cout << "Loading STLs..." << endl;
+	cout << "Loading STLs...   ";
 	
 	cout << "Done." << endl;
 }
@@ -211,7 +214,7 @@ void ofApp::loadScanFunction() {
 		string justTheFile = filenameAsString.substr(start + 1, end - start - 1);
 		ofMatrix4x4 *laserToWorld(transformations.at(justTheFile));
 		Cloud *cloud = new Cloud(filename, laserToWorld);
-		cout << "Matching culturals with the cloud..." << endl;
+		cout << "Matching culturals with the cloud...   ";
 		for (vector<Cultural*>::iterator cultural = culturals.begin(); cultural != culturals.end(); cultural++) {
 			cloud->addModel(*cultural);
 		}
@@ -311,6 +314,64 @@ void ofApp::saveScanFunction() {
 	//}
 }
 
+/*
+Ambulance:Transportation
+AP:Street Objects
+Barrier:Street Objects
+Boat:Transportation
+BR:Street Objects
+BS:Bus Stations
+Bush:Plants
+BushEnd:Plants
+BushPart:Plants
+Canoe:Transportation
+Car of all sorts:Transportation
+Chair, ChairNew:Furniture
+Cone:Street Objects
+Construction of all sorts:Buildings & construction
+Container, Crane, Debris:Buildings & construction
+DW, EB, FH, Flag:Street Objects
+Flower:Plants
+Forklift:Buildings & construction
+FS, GB, GC, GH:Street Objects
+Helicopter, kayak:Transportation
+LP:Street Objects
+MetalPile:Buildings & construction
+misc,NB:Misc.
+PB:Street Objects
+PileOfShit:Buildings & construction
+PL:Street Objects
+Plane:Transportation
+Plant:Plants
+Playground:Parks
+PM,Pole:Street Objects
+PP,PR:Misc.
+Props_Bicycle:Transportation
+Props_Box,Props_Chalkboard:Misc.
+PT:Phone Booths
+RecyclingBin:Street Objects
+SB,SBnew:Furniture
+Scooter:Transportation
+Sculpture:Parks
+SkyTrain:Transportation
+StoneRamp:Parks
+SunShade,SunTent,Table,TableNew:Furniture
+TankerCar:Transportation
+TC,TL:Street Objects
+Train_Car,Train_Engine:Transportation
+Tree_Maple,Tree:Plants
+TS:Misc.
+WarningPost:Street Objects
+WL:Misc.
+
+
+
+*/
+
+void ofApp::updateFOVFunction() {
+	camera.setFov(fov);
+}
+
 void ofApp::exit() {
 	//segmentPlaneButton.removeListener(this, &ofApp::segmentButtonPressed);
 }
@@ -328,13 +389,13 @@ void ofApp::draw() {
 	camera.begin(viewport3D);
 	glPointSize(pointSize);
 	camera.setFov(fov);
-	camera.setNearClip(2);
-	camera.setFarClip(6000);
+	//camera.setNearClip(2);
+	//camera.setFarClip(6000);
 	for (vector<Cloud*>::iterator cloud = clouds.begin(); cloud != clouds.end(); cloud++) {
 		ofPushMatrix();
 		ofMultMatrix(ofMatrix4x4::getTransposedOf((*cloud)->getLaserToWorld()));
-		if (!(mouseTouch))
-			camera.setGlobalPosition(center);
+		//if (!(mouseTouch))
+		//	camera.setGlobalPosition(center);
 		if (loadStlButton)
 			if (clouds.size() > 0)
 				(*cloud)->drawModels();

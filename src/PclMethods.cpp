@@ -75,7 +75,7 @@ bool filterByProbability(pcl::PointCloud<pcl::PointXYZ>::Ptr basic, pcl::PointCl
 
 		if ((DivTen != 0) && (i % DivTen) == 0)
 		{
-			printf("%d%%  ", (precent));
+			printf("\r%d%%  ", (precent));
 			precent += 10;
 		}
 	}

@@ -157,7 +157,7 @@ void testgszf(const char* filename, SLDGEN_LSRZF_CLaserScan& l_ZFScan, pcl::Poin
     
 		if (counter++ %divTen == 0)
 		{
-					printf("%d%%  ", (precent));
+					printf("\r%d%%  ", (precent));
 					precent+=10;
 		}
 		

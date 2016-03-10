@@ -9,7 +9,7 @@ Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld) : filename(filenam
 	else
 		initTargetVer(filename, fullCloud);
 	filterByProbability(fullCloud, filteredCloud, FILTER_PROB);
-	cout << "Inserting to mesh..." << endl;
+	cout << "Inserting to mesh...   ";
 	fullCloudMesh = pclNodesToPoints(fullCloud);
 	filteredCloudMesh = pclNodesToPoints(filteredCloud);
 	cout << "Done." << endl;
