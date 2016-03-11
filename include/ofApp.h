@@ -34,7 +34,6 @@ class ofApp : public ofBaseApp {
 
 private:
 	//methods
-	enum STATUS_MOVE { GLOBAL = 0, LOCAL = 1 } statusMoveEnum;
 	void parseCulturals();
 	void parseTransformations();
 	void setup();
@@ -54,44 +53,50 @@ private:
 	void configViewportFullScreen(ofRectangle & viewport);
 	void circleResolutionChanged(int & circleResolution);
 	void drawAxis();
-	void loadStlFunction();
+	void showModelsFunction();
 	void loadScanFunction();
 	void saveScanFunction();
-	void updateFOVFunction();
 	void changeMode();
-	//ofMesh* meshFromCloudAndNormals(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, pcl::PointCloud<pcl::Normal>::Ptr normals, pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr principal_curvatures);
-	//fields
+	void mapCulturalsToCategories();
+	string extractCulturalTypeFromFilename(const string& filename);
+
+	// what are these fields?
+	enum STATUS_MOVE { GLOBAL = 0, LOCAL = 1 } statusMoveEnum;
 	bool bHide;
 	bool mouseTouch;
-	//fields
 	ofTrueTypeFont font;
 	string outputInfo;
+	ofxIntSlider circleResolution;
+	ofxLabel cameraStatus;
+	ofSoundPlayer ring;
+
+	//known fields
+	Camera camera;
+	ofRectangle viewport3D;
+	//ObjectsLib* objects;
+	vector<string> transformationFiles;
+	unordered_map<string, ofMatrix4x4*> transformations;
+	unordered_map<string, string> culturalCategories;
+	vector<Cloud*> clouds;
+	vector<ofxLabel*> cloudNames;
+	vector<Cultural*> culturals;
+	ofxToggle showFilteredCloudsToggle;
+	ofxButton showModelsButton;
 	ofxButton loadScanButton;
 	ofxButton saveScanButton;
 	ofxFloatSlider fov;
 	ofxFloatSlider pointSize;
 	ofxColorSlider color;
-	ofxVec3Slider center;
-	ofxIntSlider circleResolution;
-	ofxLabel cameraStatus;
+	ofxVec3Slider coordinate;
 	ofxPanel gui;
-	ofSoundPlayer ring;
-	Camera camera;
-	ofRectangle viewport3D;
-	ObjectsLib* objects;
-	vector<string> transformationFiles;
-	unordered_map<string, ofMatrix4x4*> transformations;
-	vector<Cloud*> clouds;
-	vector<ofxLabel*> cloudNames;
-	vector<Cultural*> culturals;
-	ofxToggle filteredImage;
-	ofxToggle loadStlButton;
-	ofxToggle bush;
-	ofxToggle tree;
-	ofxToggle lamppost;
-	ofxToggle construction;
-	ofxToggle car;
-	ofxToggle pole;
-	ofxToggle TS;
-	ofxToggle TM;
+	bool showModelsButtonPressed;
+	ofxToggle transportation;
+	ofxToggle streetObjects;
+	ofxToggle busStations;
+	ofxToggle plants;
+	ofxToggle constructionAndBuildings;
+	ofxToggle misc;
+	ofxToggle parks;
+	ofxToggle furniture;
+	ofxToggle phoneBooths;
 };

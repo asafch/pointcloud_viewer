@@ -4,12 +4,11 @@
 //pcl::PointCloud<pcl::Normal>::Ptr	cloudNormals(new pcl::PointCloud<pcl::Normal>);
 //pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr principal_curvatures(new pcl::PointCloud<pcl::PrincipalCurvatures>());
 
-void ofApp::configViewportFullScreen(ofRectangle & viewport) {
-// utlitly function to randomise a rectangle
-viewport.x = 0;
-viewport.y = 0;
-viewport.width = ofGetWidth();
-viewport.height = ofGetHeight();
+void ofApp::configViewportFullScreen(ofRectangle &viewport) {
+	viewport.x = 0;
+	viewport.y = 0;
+	viewport.width = ofGetWidth();
+	viewport.height = ofGetHeight();
 }
 
 void ofApp::parseCulturals() {
@@ -67,6 +66,18 @@ void ofApp::parseCulturals() {
 }
 
 void ofApp::parseTransformations() {
+	/*
+	* The vector 'transformationFiles' holds the paths to all the files that contain transformations for the scans.
+	* These file names are used in ofApp::parseTransformations() to enable the user flexibility to load whatever scan he chooses,
+	* so the clouds and respective STLs would be rendered in their respective world coordinates.
+	*/
+	transformationFiles.push_back("C:\\scans\\transformations\\Area1LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area2LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area4LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area5LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area6LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area7LaserVsWorld.csv");
+	transformationFiles.push_back("C:\\scans\\transformations\\Area8LaserVsWorld.csv");
 	cout << "Parsing " << transformationFiles.size() << " transformation files...   ";
 	for (vector<string>::iterator file = transformationFiles.begin(); file != transformationFiles.end(); file++) {
 		ifstream input(*file);
@@ -148,20 +159,9 @@ void ofApp::parseTransformations() {
 }
 
 void ofApp::setup() {
-	/*
-	* The vector 'transformationFiles' holds the paths to all the files that contain transformations for the scans.
-	* These file names are used in ofApp::parseTransformations() to enable the user flexibility to load whatever scan he chooses,
-	* so the clouds and respective STLs would be rendered in their respective world coordinates.
-	*/
-	transformationFiles.push_back("C:\\scans\\transformations\\Area1LaserVsWorld.csv");
-	transformationFiles.push_back("C:\\scans\\transformations\\Area2LaserVsWorld.csv");
-	transformationFiles.push_back("C:\\scans\\transformations\\Area4LaserVsWorld.csv");
-	transformationFiles.push_back("C:\\scans\\transformations\\Area5LaserVsWorld.csv");
-	transformationFiles.push_back("C:\\scans\\transformations\\Area6LaserVsWorld.csv");
-	transformationFiles.push_back("C:\\scans\\transformations\\Area7LaserVsWorld.csv");
-	transformationFiles.push_back("C:\\scans\\transformations\\Area8LaserVsWorld.csv");
-	//parseCulturals();
+	showModelsButtonPressed = false;
 	parseTransformations();
+	parseCulturals();
 	mouseTouch = false;
 	ofSetVerticalSync(true);
 	// we add this listener before setting up so the initial circle resolution is correct
@@ -179,27 +179,137 @@ void ofApp::setup() {
 	gui.add(fov.setup("FOV", 60, 0, 180));
 	gui.add(pointSize.setup("Point size", 1, 1, 10));
 	//camera.setPosition(3476, 2872, 18);
-	gui.add(center.setup("Coordinate", camera.getGlobalPosition(), ofVec3f(-5000, -5000, -5000), ofVec3f(5000, 5000, 5000)));
-	gui.add(filteredImage.setup("Filter image", false));
-	gui.add(loadStlButton.setup("Load STLs", false));
+	gui.add(coordinate.setup("Coordinate", camera.getGlobalPosition(), ofVec3f(-5000, -5000, -5000), ofVec3f(5000, 5000, 5000)));
+	gui.add(showFilteredCloudsToggle.setup("Filter image", false));
+	gui.add(showModelsButton.setup("Show models", false));
+	showModelsButton.addListener(this, &ofApp::showModelsFunction);
 	outputInfo = "Load scan";
 	//	camera.setAutoDistance(false);
 	camera.setDistance(0.00);
-	camera.setGlobalPosition(center);
+	camera.setGlobalPosition(coordinate);
 	//bHide = true;
 	configViewportFullScreen(viewport3D);
 	ofEnableSmoothing();
 	//ring.loadSound("ring.wav");
-	objects = new ObjectsLib(ofVec3f(3495.679, 2892.808, 15.74835), ofVec3f(-3.30E-02, -4.67E-02, 3.428114), ofVec3f(-1.42576, 2.28E-03, -1.04E-02), ofVec3f(-3.583694, -0.266352218, 3.6992804));
+	//objects = new ObjectsLib(ofVec3f(3495.679, 2892.808, 15.74835), ofVec3f(-3.30E-02, -4.67E-02, 3.428114), ofVec3f(-1.42576, 2.28E-03, -1.04E-02), ofVec3f(-3.583694, -0.266352218, 3.6992804));
 	//objects->loadModels();
 	camera.setNearClip(2);
 	camera.setFarClip(6000);
+	mapCulturalsToCategories();
 }
 
-void ofApp::loadStlFunction() {
-	cout << "Loading STLs...   ";
-	
-	cout << "Done." << endl;
+void ofApp::mapCulturalsToCategories() {
+	culturalCategories.emplace("Ambulance", "Transportation");
+	culturalCategories.emplace("AP", "Street Objects");
+	culturalCategories.emplace("Barrier", "Street Objects");
+	culturalCategories.emplace("Boat", "Transportation");
+	culturalCategories.emplace("BR", "Street Objects");
+	culturalCategories.emplace("BS", "Bus Stations");
+	culturalCategories.emplace("Bush", "Plants");
+	culturalCategories.emplace("BushEnd", "Plants");
+	culturalCategories.emplace("BushPart", "Plants");
+	culturalCategories.emplace("Canoe", "Transportation");
+	culturalCategories.emplace("Car", "Transportation");
+	culturalCategories.emplace("Chair", "Furniture");
+	culturalCategories.emplace("ChairNew", "Furniture");
+	culturalCategories.emplace("Cone", "Street Objects");
+	culturalCategories.emplace("Construction", "Construction & Buildings");
+	culturalCategories.emplace("Conatainer", "Construction & Buildings");
+	culturalCategories.emplace("Crane", "Construction & Buildings");
+	culturalCategories.emplace("CraneHighGray", "Construction & Buildings");
+	culturalCategories.emplace("CraneHighRed", "Construction & Buildings");
+	culturalCategories.emplace("CraneHighYellow", "Construction & Buildings");
+	culturalCategories.emplace("CraneLowGray", "Construction & Buildings");
+	culturalCategories.emplace("CraneLowRed", "Construction & Buildings");
+	culturalCategories.emplace("CraneLowYellow", "Construction & Buildings");
+	culturalCategories.emplace("Debris", "Construction & Buildings");
+	culturalCategories.emplace("DW", "Street Objects");
+	culturalCategories.emplace("EB", "Street Objects");
+	culturalCategories.emplace("FH", "Street Objects");
+	culturalCategories.emplace("Flag", "Street Objects");
+	culturalCategories.emplace("Flower", "Plants");
+	culturalCategories.emplace("Forklift", "Construction & Buildings");
+	culturalCategories.emplace("FS", "Street Objects");
+	culturalCategories.emplace("GB", "Street Objects");
+	culturalCategories.emplace("GC", "Street Objects");
+	culturalCategories.emplace("GH", "Street Objects");
+	culturalCategories.emplace("Helicopter", "Transportation");
+	culturalCategories.emplace("kayak", "Transportation");
+	culturalCategories.emplace("LP", "Street Objects");
+	culturalCategories.emplace("MetalPile", "Construction & Buildings");
+	culturalCategories.emplace("misc", "Misc.");
+	culturalCategories.emplace("NB", "Misc.");
+	culturalCategories.emplace("PB", "Street Objects");
+	culturalCategories.emplace("PileOfTires", "Construction & Buildings");
+	culturalCategories.emplace("PL", "Street Objects");
+	culturalCategories.emplace("Plane", "Transportation");
+	culturalCategories.emplace("Plant", "Plants");
+	culturalCategories.emplace("Playground", "Parks");
+	culturalCategories.emplace("PM", "Street Objects");
+	culturalCategories.emplace("Pole", "Street Objects");
+	culturalCategories.emplace("PP", "Misc.");
+	culturalCategories.emplace("PR", "Misc.");
+	culturalCategories.emplace("Props_Bag", "Transportation");
+	culturalCategories.emplace("Props_Bicycle", "Transportation");
+	culturalCategories.emplace("Props_Box", "Misc.");
+	culturalCategories.emplace("Props_Chalkboard", "Misc.");
+	culturalCategories.emplace("PT", "Phone Booths");
+	culturalCategories.emplace("RecyclingBin", "Street Objects");
+	culturalCategories.emplace("SB", "Furniture");
+	culturalCategories.emplace("SBnew", "Furniture");
+	culturalCategories.emplace("Scooter", "Transportation");
+	culturalCategories.emplace("Sculpture", "Parks");
+	culturalCategories.emplace("SkyTrain", "Transportation");
+	culturalCategories.emplace("StoneRamp", "Parks");
+	culturalCategories.emplace("Sunshade", "Furniture");
+	culturalCategories.emplace("SunTent", "Furniture");
+	culturalCategories.emplace("Table", "Furniture");
+	culturalCategories.emplace("TableNew", "Furniture");
+	culturalCategories.emplace("TankerCar", "Transportation");
+	culturalCategories.emplace("TC", "Street Objects");
+	culturalCategories.emplace("TL", "Street Objects");
+	culturalCategories.emplace("Train_Car", "Transportation");
+	culturalCategories.emplace("Train_Engine", "Transportation");
+	culturalCategories.emplace("Tree_Maple", "Plants");
+	culturalCategories.emplace("Tree", "Plants");
+	culturalCategories.emplace("TS", "Misc.");
+	culturalCategories.emplace("WarningPost", "Street Objects");
+	culturalCategories.emplace("WL", "Misc.");
+}
+
+string ofApp::extractCulturalTypeFromFilename(const string& filename) {
+	size_t dot = filename.rfind(".");
+	string result = filename.substr(0, dot);
+	size_t lastSlash = result.rfind("\\");
+	result = result.substr(lastSlash + 1, result.length() - lastSlash);
+	size_t junk = result.rfind("-");
+	if (junk != string::npos) {
+		result = result.substr(0, junk);
+		return result;
+	}
+	junk = result.rfind("_");
+	if (junk != string::npos) {
+		result = result.substr(0, junk);
+		return result;
+	}
+	return result;
+}
+
+void ofApp::showModelsFunction() {
+	if (clouds.size() == 0)
+		cout << "Load at least one cloud in order to display models" << endl;
+	else {
+		showModelsButtonPressed = true;
+		gui.add(transportation.setup("Transportation", true));
+		gui.add(streetObjects.setup("Street Objects", true));
+		gui.add(busStations.setup("Bus Stations", true));
+		gui.add(plants.setup("Plants", true));
+		gui.add(constructionAndBuildings.setup("Construction & Buildings", true));
+		gui.add(parks.setup("Parks", true));
+		gui.add(furniture.setup("Furniture", true));
+		gui.add(phoneBooths.setup("Phone Booths", true));
+		gui.add(misc.setup("Misc.", true));
+	}
 }
 
 void ofApp::loadScanFunction() {
@@ -267,19 +377,7 @@ void ofApp::loadScanFunction() {
 		//cloud->addModel(new Object3dModel("C:\\scans\\culturals\\Tree-28.stl", *laserToWorld, 3352.25, 2709.77, 26.0366, 0, 0, 0.887011, -0.461749, 0.615304, 0.556119, 0.615304));
 		//cloud->addModel(new Object3dModel("C:\\scans\\culturals\\Tree-28.stl", *laserToWorld, 3353.1, 2710.47, 25.7781, 0, 0, 0.887011, -0.461749, 0.556119, 1.63855, 0.556119));
 		//cloud->addModel(new Object3dModel("C:\\scans\\culturals\\Tree-33.stl", *laserToWorld, 3330.4, 2751.06, 27.8279, 0, 0, 0, 1, 1.63855, 1, 1.63855));
-		aiMatrix4x4 mat = {};
 		clouds.push_back(cloud);
-		const size_t lengthFileName = strlen(filename);
-		//normals load
-		char* fileNameNormal = new char[lengthFileName + 10];
-		sprintf(fileNameNormal, "%s(normal)", filename);
-		//if (pcl::io::loadPCDFile<pcl::Normal>(fileNameNormal, *cloudNormals) >= 0 ) //try to open first
-		//	 meshCloudNormals = meshFromCloudAndNormals(cloud, cloudNormals);
-		//curvature load
-		char* fileNameCurv = new char[lengthFileName + 10];
-		sprintf(fileNameCurv, "%s(curvat)", filename);
-		//if (pcl::io::loadPCDFile<pcl::PrincipalCurvatures>(fileNameCurv, *principal_curvatures) >= 0) //try to open first
-		//	meshCloudNormals = meshFromCloudAndNormals(cloud->getFullCloud(), cloudNormals, principal_curvatures);
 		ofxLabel *label = new ofxLabel();
 		cloudNames.push_back(label);
 		gui.add(label->setup("Cloud", filename));
@@ -314,64 +412,6 @@ void ofApp::saveScanFunction() {
 	//}
 }
 
-/*
-Ambulance:Transportation
-AP:Street Objects
-Barrier:Street Objects
-Boat:Transportation
-BR:Street Objects
-BS:Bus Stations
-Bush:Plants
-BushEnd:Plants
-BushPart:Plants
-Canoe:Transportation
-Car of all sorts:Transportation
-Chair, ChairNew:Furniture
-Cone:Street Objects
-Construction of all sorts:Buildings & construction
-Container, Crane, Debris:Buildings & construction
-DW, EB, FH, Flag:Street Objects
-Flower:Plants
-Forklift:Buildings & construction
-FS, GB, GC, GH:Street Objects
-Helicopter, kayak:Transportation
-LP:Street Objects
-MetalPile:Buildings & construction
-misc,NB:Misc.
-PB:Street Objects
-PileOfShit:Buildings & construction
-PL:Street Objects
-Plane:Transportation
-Plant:Plants
-Playground:Parks
-PM,Pole:Street Objects
-PP,PR:Misc.
-Props_Bicycle:Transportation
-Props_Box,Props_Chalkboard:Misc.
-PT:Phone Booths
-RecyclingBin:Street Objects
-SB,SBnew:Furniture
-Scooter:Transportation
-Sculpture:Parks
-SkyTrain:Transportation
-StoneRamp:Parks
-SunShade,SunTent,Table,TableNew:Furniture
-TankerCar:Transportation
-TC,TL:Street Objects
-Train_Car,Train_Engine:Transportation
-Tree_Maple,Tree:Plants
-TS:Misc.
-WarningPost:Street Objects
-WL:Misc.
-
-
-
-*/
-
-void ofApp::updateFOVFunction() {
-	camera.setFov(fov);
-}
-
 void ofApp::exit() {
 	//segmentPlaneButton.removeListener(this, &ofApp::segmentButtonPressed);
 }
@@ -396,15 +436,14 @@ void ofApp::draw() {
 		ofMultMatrix(ofMatrix4x4::getTransposedOf((*cloud)->getLaserToWorld()));
 		//if (!(mouseTouch))
 		//	camera.setGlobalPosition(center);
-		if (loadStlButton)
+		if (showModelsButtonPressed)
 			if (clouds.size() > 0)
 				(*cloud)->drawModels();
 			else {
 				cout << "You have to load a scan before rendering models" << endl;
-				loadStlButton = false;
+				//showModelsButton = false;
 			}
-
-		if (filteredImage)
+		if (showFilteredCloudsToggle)
 			(*cloud)->getFilteredCloudMesh()->draw();
 		else
 			(*cloud)->getFullCloudMesh()->draw();
@@ -440,23 +479,36 @@ void ofApp::keyPressed(int key) {
 	if (key == 'h') {
 		bHide = !bHide;
 	}
-	if (key == 's') {
-		gui.saveToFile("settings.xml");
-	}
+	//if (key == 's') {
+	//	gui.saveToFile("settings.xml");
+	//}
 	if (key == 'l') {
 		gui.loadFromFile("settings.xml");
 	}
 	if (key == ' ') {
 		color = ofColor(255);
 	}
-	if (key == 'a') {
-		drawAxis();
-	}
-
 }
 
 void ofApp::keyReleased(int key) {
-
+	switch (key) {
+	case 'w':
+		glTranslatef(0, 0, -10);
+		cout << "w" << endl;
+		break;
+	case 'a':
+		glTranslatef(-10, 0, 0);
+		cout << "a" << endl;
+		break;
+	case 's':
+		glTranslatef(0, 0, 10);
+		cout << "s" << endl;
+		break;
+	case 'd':
+		glTranslatef(10, 0, 0);
+		cout << "d" << endl;
+		break;
+	}
 }
 
 void ofApp::mouseMoved(int x, int y) {
@@ -484,7 +536,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 }
 
 void ofApp::mouseReleased(int x, int y, int button) {
-	center = camera.getGlobalPosition();
+	coordinate = camera.getGlobalPosition();
 	mouseTouch = false;
 
 }
