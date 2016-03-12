@@ -193,6 +193,7 @@
     <ClCompile Include="src\Cultural.cpp" />
     <ClCompile Include="src\FileHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mappings.cpp" />
     <ClCompile Include="src\Object3dModel.cpp" />
     <ClCompile Include="src\ObjectsLib.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="include\Cloud.h" />
     <ClInclude Include="include\Cultural.h" />
     <ClInclude Include="include\FileHandler.h" />
+    <ClInclude Include="include\Mappings.h" />
     <ClInclude Include="include\Object3dModel.h" />
     <ClInclude Include="include\ObjectsLib.h" />
     <ClInclude Include="include\ofApp.h" />

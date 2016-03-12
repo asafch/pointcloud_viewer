@@ -8,6 +8,7 @@
 #include <pcl/common/common_headers.h>
 
 #include "Cultural.h"
+#include "Mappings.h"
 #include "Object3dModel.h"
 #include "PclMethods.h"
 
@@ -19,7 +20,7 @@ ofMesh* pclNodesToPoints(pcl::PointCloud<pcl::PointXYZ>::Ptr vec);
 
 class Cloud {
 public:
-	Cloud(const char *filename, ofMatrix4x4 *laserToWorld);
+	Cloud(const char *filename, ofMatrix4x4 *laserToWorld, Mappings *mappings, unordered_map<string, bool> *selectedCulturalCategories);
 	~Cloud();
 	pcl::PointCloud<pcl::PointXYZ>::Ptr getFullCloud();
 	pcl::PointCloud<pcl::PointXYZ>::Ptr getFilteredCloud();
@@ -34,8 +35,10 @@ private:
 	const char *filename;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr fullCloud;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr filteredCloud;
+	unordered_map<string, bool> *selectedCulturalCategories;
 	vector<Object3dModel*> models;
 	ofMesh* fullCloudMesh;
 	ofMesh* filteredCloudMesh;
 	ofMatrix4x4 laserToWorld;
+	Mappings *mappings;
 };

@@ -12,7 +12,7 @@ void ofApp::configViewportFullScreen(ofRectangle &viewport) {
 }
 
 void ofApp::parseCulturals() {
-	cout << "Parsing culturals...   ";
+	cout << "Parsing culturals... ";
 	ifstream input(CULTURALS_LIST);
 	if (!input.good()) {
 		cout << endl << "Error: opening culturals list" << endl;
@@ -78,7 +78,11 @@ void ofApp::parseTransformations() {
 	transformationFiles.push_back("C:\\scans\\transformations\\Area6LaserVsWorld.csv");
 	transformationFiles.push_back("C:\\scans\\transformations\\Area7LaserVsWorld.csv");
 	transformationFiles.push_back("C:\\scans\\transformations\\Area8LaserVsWorld.csv");
-	cout << "Parsing " << transformationFiles.size() << " transformation files...   ";
+	cout << "Parsing " << transformationFiles.size() << " transformation files... ";
+	// x, y, z are just temps to calculate the average center of all scans
+	//float x = 0;
+	//float y = 0;
+	//float z = 0;
 	for (vector<string>::iterator file = transformationFiles.begin(); file != transformationFiles.end(); file++) {
 		ifstream input(*file);
 		if (!input.good()) {
@@ -152,13 +156,34 @@ void ofApp::parseTransformations() {
 			end = line.find(",", start + 1);
 			ofMatrix4x4 *transformation = new ofMatrix4x4(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
 			transformations.emplace(name, transformation);
+			//x += a4;
+			//y += b4;
+			//z += c4;
 		}
 		input.close();
 	}
+	//x /= transformations.size();
+	//y /= transformations.size();
+	//z /= transformations.size();
 	cout << "Done: total of " << transformations.size() << " transformations." << endl;
+	//cout << "x: " << x << " , y: " << y << ", z: " << z << endl;
+}
+
+void ofApp::populateSelectedCategories() {
+	selectedCategories.emplace("Transportation", true);
+	selectedCategories.emplace("Street Objects", true);
+	selectedCategories.emplace("Bus Stations", true);
+	selectedCategories.emplace("Plants", true);
+	selectedCategories.emplace("Construction & Buildings", true);
+	selectedCategories.emplace("Misc.", true);
+	selectedCategories.emplace("Parks", true);
+	selectedCategories.emplace("Furniture", true);
+	selectedCategories.emplace("Phone Booths", true);
 }
 
 void ofApp::setup() {
+	mappings = new Mappings();
+	populateSelectedCategories();
 	showModelsButtonPressed = false;
 	parseTransformations();
 	parseCulturals();
@@ -195,105 +220,105 @@ void ofApp::setup() {
 	//objects->loadModels();
 	camera.setNearClip(2);
 	camera.setFarClip(6000);
-	mapCulturalsToCategories();
+	//mapCulturalsToCategories();
 }
 
-void ofApp::mapCulturalsToCategories() {
-	culturalCategories.emplace("Ambulance", "Transportation");
-	culturalCategories.emplace("AP", "Street Objects");
-	culturalCategories.emplace("Barrier", "Street Objects");
-	culturalCategories.emplace("Boat", "Transportation");
-	culturalCategories.emplace("BR", "Street Objects");
-	culturalCategories.emplace("BS", "Bus Stations");
-	culturalCategories.emplace("Bush", "Plants");
-	culturalCategories.emplace("BushEnd", "Plants");
-	culturalCategories.emplace("BushPart", "Plants");
-	culturalCategories.emplace("Canoe", "Transportation");
-	culturalCategories.emplace("Car", "Transportation");
-	culturalCategories.emplace("Chair", "Furniture");
-	culturalCategories.emplace("ChairNew", "Furniture");
-	culturalCategories.emplace("Cone", "Street Objects");
-	culturalCategories.emplace("Construction", "Construction & Buildings");
-	culturalCategories.emplace("Conatainer", "Construction & Buildings");
-	culturalCategories.emplace("Crane", "Construction & Buildings");
-	culturalCategories.emplace("CraneHighGray", "Construction & Buildings");
-	culturalCategories.emplace("CraneHighRed", "Construction & Buildings");
-	culturalCategories.emplace("CraneHighYellow", "Construction & Buildings");
-	culturalCategories.emplace("CraneLowGray", "Construction & Buildings");
-	culturalCategories.emplace("CraneLowRed", "Construction & Buildings");
-	culturalCategories.emplace("CraneLowYellow", "Construction & Buildings");
-	culturalCategories.emplace("Debris", "Construction & Buildings");
-	culturalCategories.emplace("DW", "Street Objects");
-	culturalCategories.emplace("EB", "Street Objects");
-	culturalCategories.emplace("FH", "Street Objects");
-	culturalCategories.emplace("Flag", "Street Objects");
-	culturalCategories.emplace("Flower", "Plants");
-	culturalCategories.emplace("Forklift", "Construction & Buildings");
-	culturalCategories.emplace("FS", "Street Objects");
-	culturalCategories.emplace("GB", "Street Objects");
-	culturalCategories.emplace("GC", "Street Objects");
-	culturalCategories.emplace("GH", "Street Objects");
-	culturalCategories.emplace("Helicopter", "Transportation");
-	culturalCategories.emplace("kayak", "Transportation");
-	culturalCategories.emplace("LP", "Street Objects");
-	culturalCategories.emplace("MetalPile", "Construction & Buildings");
-	culturalCategories.emplace("misc", "Misc.");
-	culturalCategories.emplace("NB", "Misc.");
-	culturalCategories.emplace("PB", "Street Objects");
-	culturalCategories.emplace("PileOfTires", "Construction & Buildings");
-	culturalCategories.emplace("PL", "Street Objects");
-	culturalCategories.emplace("Plane", "Transportation");
-	culturalCategories.emplace("Plant", "Plants");
-	culturalCategories.emplace("Playground", "Parks");
-	culturalCategories.emplace("PM", "Street Objects");
-	culturalCategories.emplace("Pole", "Street Objects");
-	culturalCategories.emplace("PP", "Misc.");
-	culturalCategories.emplace("PR", "Misc.");
-	culturalCategories.emplace("Props_Bag", "Transportation");
-	culturalCategories.emplace("Props_Bicycle", "Transportation");
-	culturalCategories.emplace("Props_Box", "Misc.");
-	culturalCategories.emplace("Props_Chalkboard", "Misc.");
-	culturalCategories.emplace("PT", "Phone Booths");
-	culturalCategories.emplace("RecyclingBin", "Street Objects");
-	culturalCategories.emplace("SB", "Furniture");
-	culturalCategories.emplace("SBnew", "Furniture");
-	culturalCategories.emplace("Scooter", "Transportation");
-	culturalCategories.emplace("Sculpture", "Parks");
-	culturalCategories.emplace("SkyTrain", "Transportation");
-	culturalCategories.emplace("StoneRamp", "Parks");
-	culturalCategories.emplace("Sunshade", "Furniture");
-	culturalCategories.emplace("SunTent", "Furniture");
-	culturalCategories.emplace("Table", "Furniture");
-	culturalCategories.emplace("TableNew", "Furniture");
-	culturalCategories.emplace("TankerCar", "Transportation");
-	culturalCategories.emplace("TC", "Street Objects");
-	culturalCategories.emplace("TL", "Street Objects");
-	culturalCategories.emplace("Train_Car", "Transportation");
-	culturalCategories.emplace("Train_Engine", "Transportation");
-	culturalCategories.emplace("Tree_Maple", "Plants");
-	culturalCategories.emplace("Tree", "Plants");
-	culturalCategories.emplace("TS", "Misc.");
-	culturalCategories.emplace("WarningPost", "Street Objects");
-	culturalCategories.emplace("WL", "Misc.");
-}
+//void ofApp::mapCulturalsToCategories() {
+//	culturalCategories.emplace("Ambulance", "Transportation");
+//	culturalCategories.emplace("AP", "Street Objects");
+//	culturalCategories.emplace("Barrier", "Street Objects");
+//	culturalCategories.emplace("Boat", "Transportation");
+//	culturalCategories.emplace("BR", "Street Objects");
+//	culturalCategories.emplace("BS", "Bus Stations");
+//	culturalCategories.emplace("Bush", "Plants");
+//	culturalCategories.emplace("BushEnd", "Plants");
+//	culturalCategories.emplace("BushPart", "Plants");
+//	culturalCategories.emplace("Canoe", "Transportation");
+//	culturalCategories.emplace("Car", "Transportation");
+//	culturalCategories.emplace("Chair", "Furniture");
+//	culturalCategories.emplace("ChairNew", "Furniture");
+//	culturalCategories.emplace("Cone", "Street Objects");
+//	culturalCategories.emplace("Construction", "Construction & Buildings");
+//	culturalCategories.emplace("Conatainer", "Construction & Buildings");
+//	culturalCategories.emplace("Crane", "Construction & Buildings");
+//	culturalCategories.emplace("CraneHighGray", "Construction & Buildings");
+//	culturalCategories.emplace("CraneHighRed", "Construction & Buildings");
+//	culturalCategories.emplace("CraneHighYellow", "Construction & Buildings");
+//	culturalCategories.emplace("CraneLowGray", "Construction & Buildings");
+//	culturalCategories.emplace("CraneLowRed", "Construction & Buildings");
+//	culturalCategories.emplace("CraneLowYellow", "Construction & Buildings");
+//	culturalCategories.emplace("Debris", "Construction & Buildings");
+//	culturalCategories.emplace("DW", "Street Objects");
+//	culturalCategories.emplace("EB", "Street Objects");
+//	culturalCategories.emplace("FH", "Street Objects");
+//	culturalCategories.emplace("Flag", "Street Objects");
+//	culturalCategories.emplace("Flower", "Plants");
+//	culturalCategories.emplace("Forklift", "Construction & Buildings");
+//	culturalCategories.emplace("FS", "Street Objects");
+//	culturalCategories.emplace("GB", "Street Objects");
+//	culturalCategories.emplace("GC", "Street Objects");
+//	culturalCategories.emplace("GH", "Street Objects");
+//	culturalCategories.emplace("Helicopter", "Transportation");
+//	culturalCategories.emplace("kayak", "Transportation");
+//	culturalCategories.emplace("LP", "Street Objects");
+//	culturalCategories.emplace("MetalPile", "Construction & Buildings");
+//	culturalCategories.emplace("misc", "Misc.");
+//	culturalCategories.emplace("NB", "Misc.");
+//	culturalCategories.emplace("PB", "Street Objects");
+//	culturalCategories.emplace("PileOfTires", "Construction & Buildings");
+//	culturalCategories.emplace("PL", "Street Objects");
+//	culturalCategories.emplace("Plane", "Transportation");
+//	culturalCategories.emplace("Plant", "Plants");
+//	culturalCategories.emplace("Playground", "Parks");
+//	culturalCategories.emplace("PM", "Street Objects");
+//	culturalCategories.emplace("Pole", "Street Objects");
+//	culturalCategories.emplace("PP", "Misc.");
+//	culturalCategories.emplace("PR", "Misc.");
+//	culturalCategories.emplace("Props_Bag", "Transportation");
+//	culturalCategories.emplace("Props_Bicycle", "Transportation");
+//	culturalCategories.emplace("Props_Box", "Misc.");
+//	culturalCategories.emplace("Props_Chalkboard", "Misc.");
+//	culturalCategories.emplace("PT", "Phone Booths");
+//	culturalCategories.emplace("RecyclingBin", "Street Objects");
+//	culturalCategories.emplace("SB", "Furniture");
+//	culturalCategories.emplace("SBnew", "Furniture");
+//	culturalCategories.emplace("Scooter", "Transportation");
+//	culturalCategories.emplace("Sculpture", "Parks");
+//	culturalCategories.emplace("SkyTrain", "Transportation");
+//	culturalCategories.emplace("StoneRamp", "Parks");
+//	culturalCategories.emplace("Sunshade", "Furniture");
+//	culturalCategories.emplace("SunTent", "Furniture");
+//	culturalCategories.emplace("Table", "Furniture");
+//	culturalCategories.emplace("TableNew", "Furniture");
+//	culturalCategories.emplace("TankerCar", "Transportation");
+//	culturalCategories.emplace("TC", "Street Objects");
+//	culturalCategories.emplace("TL", "Street Objects");
+//	culturalCategories.emplace("Train_Car", "Transportation");
+//	culturalCategories.emplace("Train_Engine", "Transportation");
+//	culturalCategories.emplace("Tree_Maple", "Plants");
+//	culturalCategories.emplace("Tree", "Plants");
+//	culturalCategories.emplace("TS", "Misc.");
+//	culturalCategories.emplace("WarningPost", "Street Objects");
+//	culturalCategories.emplace("WL", "Misc.");
+//}
 
-string ofApp::extractCulturalTypeFromFilename(const string& filename) {
-	size_t dot = filename.rfind(".");
-	string result = filename.substr(0, dot);
-	size_t lastSlash = result.rfind("\\");
-	result = result.substr(lastSlash + 1, result.length() - lastSlash);
-	size_t junk = result.rfind("-");
-	if (junk != string::npos) {
-		result = result.substr(0, junk);
-		return result;
-	}
-	junk = result.rfind("_");
-	if (junk != string::npos) {
-		result = result.substr(0, junk);
-		return result;
-	}
-	return result;
-}
+//string ofApp::extractCulturalTypeFromFilename(const string& filename) {
+//	size_t dot = filename.rfind(".");
+//	string result = filename.substr(0, dot);
+//	size_t lastSlash = result.rfind("\\");
+//	result = result.substr(lastSlash + 1, result.length() - lastSlash);
+//	size_t junk = result.rfind("-");
+//	if (junk != string::npos) {
+//		result = result.substr(0, junk);
+//		return result;
+//	}
+//	junk = result.rfind("_");
+//	if (junk != string::npos) {
+//		result = result.substr(0, junk);
+//		return result;
+//	}
+//	return result;
+//}
 
 void ofApp::showModelsFunction() {
 	if (clouds.size() == 0)
@@ -323,7 +348,7 @@ void ofApp::loadScanFunction() {
 		size_t end = filenameAsString.find_last_of(".");
 		string justTheFile = filenameAsString.substr(start + 1, end - start - 1);
 		ofMatrix4x4 *laserToWorld(transformations.at(justTheFile));
-		Cloud *cloud = new Cloud(filename, laserToWorld);
+		Cloud *cloud = new Cloud(filename, laserToWorld, mappings, &selectedCategories);
 		cout << "Matching culturals with the cloud...   ";
 		for (vector<Cultural*>::iterator cultural = culturals.begin(); cultural != culturals.end(); cultural++) {
 			cloud->addModel(*cultural);

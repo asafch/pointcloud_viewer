@@ -70,6 +70,9 @@
     <ClCompile Include="src\Object3dModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Mappings.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -288,6 +291,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\targetver.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mappings.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

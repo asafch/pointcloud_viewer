@@ -16,6 +16,7 @@
 #include "Cloud.h"
 #include "Cultural.h"
 #include "FileHandler.h"
+#include "Mappings.h"
 #include "ObjectsLib.h"
 
 #define NORMAL_RADIUS 0.01
@@ -57,8 +58,9 @@ private:
 	void loadScanFunction();
 	void saveScanFunction();
 	void changeMode();
-	void mapCulturalsToCategories();
-	string extractCulturalTypeFromFilename(const string& filename);
+	//void mapCulturalsToCategories();
+	//string extractCulturalTypeFromFilename(const string& filename);
+	void populateSelectedCategories();
 
 	// what are these fields?
 	enum STATUS_MOVE { GLOBAL = 0, LOCAL = 1 } statusMoveEnum;
@@ -74,9 +76,11 @@ private:
 	Camera camera;
 	ofRectangle viewport3D;
 	//ObjectsLib* objects;
+	Mappings* mappings;
 	vector<string> transformationFiles;
 	unordered_map<string, ofMatrix4x4*> transformations;
 	unordered_map<string, string> culturalCategories;
+	unordered_map<string, bool> selectedCategories;
 	vector<Cloud*> clouds;
 	vector<ofxLabel*> cloudNames;
 	vector<Cultural*> culturals;

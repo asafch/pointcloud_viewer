@@ -1,15 +1,17 @@
 #include "../include/Cloud.h"
 
-Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld) : filename(filename), laserToWorld(*laserToWorld) {
+Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld, Mappings *mappings, unordered_map<string, bool> *selectedCulturalCategories) : filename(filename), laserToWorld(*laserToWorld) {
 	fullCloud = *new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
 	filteredCloud = *new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
+	this->mappings = mappings;
+	this->selectedCulturalCategories = selectedCulturalCategories;
 	const size_t length = strlen(filename);
 	if (filename[length - 3] == 'p' &&  filename[length - 2] == 'c' &&  filename[length - 1] == 'd')
 		pcl::io::loadPCDFile<pcl::PointXYZ>(filename, *fullCloud);
 	else
 		initTargetVer(filename, fullCloud);
 	filterByProbability(fullCloud, filteredCloud, FILTER_PROB);
-	cout << "Inserting to mesh...   ";
+	cout << "Inserting to meshes... ";
 	fullCloudMesh = pclNodesToPoints(fullCloud);
 	filteredCloudMesh = pclNodesToPoints(filteredCloud);
 	cout << "Done." << endl;
@@ -53,7 +55,8 @@ void Cloud::addModel(Cultural* cultural) {
 
 void Cloud::drawModels() {
 	for (vector<Object3dModel*>::iterator model = models.begin(); model != models.end(); model++) {
-		(*model)->draw();
+		if (selectedCulturalCategories->at(mappings->getCulturalCategory((*model)->getName())))
+			(*model)->draw();
 	}
 }
 

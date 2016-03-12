@@ -1,6 +1,6 @@
 #include "../include/Object3dModel.h"
 
-Object3dModel::Object3dModel(string filename,
+Object3dModel::Object3dModel(string &filename,
 							ofMatrix4x4 convertMatrix,
 							ofVec3f translation,
 							ofVec4f rotation,
@@ -10,7 +10,8 @@ Object3dModel::Object3dModel(string filename,
 	size_t start = filename.rfind("_");
 	size_t end = start;
 	start = filename.rfind("_", start - 1) + 1;
-	string ok = PATH_PREFIX + filename.substr(start, end - start) + PATH_SUFFIX;
+	name = filename.substr(start, end - start);
+	string ok = PATH_PREFIX + name + PATH_SUFFIX;
 	model->loadModel(ok);
 	//this->convertMatrix = convertMatrix;
 	this->convertMatrix = convertMatrix.getTransposedOf(convertMatrix);
@@ -35,7 +36,7 @@ Object3dModel::Object3dModel(string filename,
 }
 
 Object3dModel::~Object3dModel() {
-
+	delete model;
 }
 
 void Object3dModel::draw() {
@@ -52,5 +53,9 @@ void Object3dModel::draw() {
 	model->updateMatrix(convertMatrix);
 	model->drawFaces();
 	ofPopMatrix();
+}
+
+string Object3dModel::getName() {
+	return name;
 }
 

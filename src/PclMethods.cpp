@@ -75,12 +75,12 @@ bool filterByProbability(pcl::PointCloud<pcl::PointXYZ>::Ptr basic, pcl::PointCl
 
 		if ((DivTen != 0) && (i % DivTen) == 0)
 		{
-			printf("\r%d%%  ", (precent));
+			printf("\r%d%%", (precent));
 			precent += 10;
 		}
 	}
 	cout << endl;
-	std::cout << "Before: " << basic->points.size() << ",   After: " << afterFilter->points.size () << std::endl; //*
+	std::cout << "Before: " << basic->points.size() << ", After: " << afterFilter->points.size () << std::endl; //*
 	cout << endl;
 
 	return true;
