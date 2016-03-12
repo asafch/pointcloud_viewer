@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <unordered_map>
 
@@ -10,8 +11,7 @@ class Mappings {
 public:
 	Mappings();
 	~Mappings();
-	string getCulturalCategory(const string &cultural);
-	string extractCulturalTypeFromFilename(const string& filename);
+	string getCulturalCategory(string &cultural);
 
 private:
 	unordered_map<string, string> mappings;

@@ -129,7 +129,7 @@ void testgszf(const char* filename, SLDGEN_LSRZF_CLaserScan& l_ZFScan, pcl::Poin
 	size_t divTen = numberOfDots / 10;
 	size_t counter = 0;
 	int		precent = 0;
-	printf("Num of dots: %d\n", (l_nBeams * l_nLines));
+	printf("Num of points in cloud: %d\n", (l_nBeams * l_nLines));
   for (int l_iL = 0;	l_iL < l_nLines;	l_iL++)
   {
     int l_iRL		= l_nLines - l_iL - 1; // it turned out the ZF rotates opossite to Riegle

@@ -195,7 +195,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mappings.cpp" />
     <ClCompile Include="src\Object3dModel.cpp" />
-    <ClCompile Include="src\ObjectsLib.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\OpenFileDialog.cpp" />
     <ClCompile Include="src\PclMethods.cpp" />
@@ -208,7 +207,6 @@
     <ClInclude Include="include\FileHandler.h" />
     <ClInclude Include="include\Mappings.h" />
     <ClInclude Include="include\Object3dModel.h" />
-    <ClInclude Include="include\ObjectsLib.h" />
     <ClInclude Include="include\ofApp.h" />
     <ClInclude Include="include\OpenFileDialog.h" />
     <ClInclude Include="include\PclMethods.h" />

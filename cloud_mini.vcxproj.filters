@@ -37,9 +37,6 @@
     <ClCompile Include="..\..\of\addons\ofxGui\src\ofxToggle.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ObjectsLib.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -276,9 +273,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Object3dModel.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ObjectsLib.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\ofApp.h">

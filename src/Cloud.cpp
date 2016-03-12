@@ -1,10 +1,11 @@
 #include "../include/Cloud.h"
+#include "../include/ofApp.h"
 
-Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld, Mappings *mappings, unordered_map<string, bool> *selectedCulturalCategories) : filename(filename), laserToWorld(*laserToWorld) {
+Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld, Mappings *mappings, ofApp *app) : filename(filename), laserToWorld(*laserToWorld) {
 	fullCloud = *new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
 	filteredCloud = *new pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
 	this->mappings = mappings;
-	this->selectedCulturalCategories = selectedCulturalCategories;
+	this->app = app;
 	const size_t length = strlen(filename);
 	if (filename[length - 3] == 'p' &&  filename[length - 2] == 'c' &&  filename[length - 1] == 'd')
 		pcl::io::loadPCDFile<pcl::PointXYZ>(filename, *fullCloud);
@@ -20,6 +21,14 @@ Cloud::Cloud(const char *filename, ofMatrix4x4 *laserToWorld, Mappings *mappings
 Cloud::~Cloud() {
 	fullCloud->clear();
 	filteredCloud->clear();
+	delete &fullCloud;
+	delete &filteredCloud;
+	delete fullCloudMesh;
+	delete filteredCloudMesh;
+	for (vector<Object3dModel*>::iterator it = models.begin(); it != models.end(); it++) {
+		(*it)->~Object3dModel();
+	}
+	models.clear();
 } 
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr Cloud::getFullCloud() {
@@ -55,12 +64,14 @@ void Cloud::addModel(Cultural* cultural) {
 
 void Cloud::drawModels() {
 	for (vector<Object3dModel*>::iterator model = models.begin(); model != models.end(); model++) {
-		if (selectedCulturalCategories->at(mappings->getCulturalCategory((*model)->getName())))
+		string name = (*model)->getName();
+		string category = mappings->getCulturalCategory(name);
+		if (app->isCategorySelected(category))
 			(*model)->draw();
 	}
 }
 
-ofVec3f& Cloud::getCloudGlobalCenter() {
+ofVec3f Cloud::getCloudGlobalCenter() {
 	float x = laserToWorld._mat[0][3];
 	float y = laserToWorld._mat[1][3];
 	float z = laserToWorld._mat[2][3];

@@ -25,22 +25,26 @@ Cultural::Cultural(string name,
 	this->scaleZ = scaleZ;
 }
 
-string& Cultural::getName() {
+Cultural::~Cultural() {
+
+}
+
+string Cultural::getName() {
 	return name;
 }
 
-ofVec3f& Cultural::getCenter() {
+ofVec3f Cultural::getCenter() {
 	return ofVec3f(translationX, translationY, translationZ);
 }
 
-ofVec3f& Cultural::getTranslation() {
+ofVec3f Cultural::getTranslation() {
 	return ofVec3f(translationX, translationY, translationZ);
 }
 
-ofVec4f& Cultural::getRotation() {
+ofVec4f Cultural::getRotation() {
 	return ofVec4f(Q1, Q2, Q3, Q4);
 }
 
-ofVec3f& Cultural::getScale() {
+ofVec3f Cultural::getScale() {
 	return ofVec3f(scaleX, scaleY, scaleZ);
 }

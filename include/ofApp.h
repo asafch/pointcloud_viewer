@@ -33,8 +33,13 @@ typedef struct mpoints {
 
 class ofApp : public ofBaseApp {
 
+public:
+	bool isCategorySelected(string &category);
+
 private:
 	//methods
+	// should a destructor be implemented?
+	//virtual ~ofApp();
 	void parseCulturals();
 	void parseTransformations();
 	void setup();
@@ -56,11 +61,7 @@ private:
 	void drawAxis();
 	void showModelsFunction();
 	void loadScanFunction();
-	void saveScanFunction();
 	void changeMode();
-	//void mapCulturalsToCategories();
-	//string extractCulturalTypeFromFilename(const string& filename);
-	void populateSelectedCategories();
 
 	// what are these fields?
 	enum STATUS_MOVE { GLOBAL = 0, LOCAL = 1 } statusMoveEnum;
@@ -80,14 +81,11 @@ private:
 	vector<string> transformationFiles;
 	unordered_map<string, ofMatrix4x4*> transformations;
 	unordered_map<string, string> culturalCategories;
-	unordered_map<string, bool> selectedCategories;
 	vector<Cloud*> clouds;
-	vector<ofxLabel*> cloudNames;
 	vector<Cultural*> culturals;
 	ofxToggle showFilteredCloudsToggle;
 	ofxButton showModelsButton;
 	ofxButton loadScanButton;
-	ofxButton saveScanButton;
 	ofxFloatSlider fov;
 	ofxFloatSlider pointSize;
 	ofxColorSlider color;

@@ -19,11 +19,12 @@ public:
 			float scaleX,
 			float scaleY,
 			float scaleZ);
-	string& getName();
-	ofVec3f& getCenter();
-	ofVec3f& getTranslation();
-	ofVec4f& getRotation();
-	ofVec3f& getScale();
+	~Cultural();
+	string getName();
+	ofVec3f getCenter();
+	ofVec3f getTranslation();
+	ofVec4f getRotation();
+	ofVec3f getScale();
 
 private:
 	string name;

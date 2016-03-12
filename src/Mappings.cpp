@@ -1,5 +1,10 @@
 #include "../include/Mappings.h"
 
+/*
+These mappings are used in order to associate the different cultural items into categories, which have a 1-to-1 relation
+with the toggle buttons in the GUI.
+The culturals' names are cropped from the file names, as they were provided from the company the created them.
+*/
 Mappings::Mappings() {
 	mappings.emplace("Ambulance", "Transportation");
 	mappings.emplace("AP", "Street Objects");
@@ -11,7 +16,18 @@ Mappings::Mappings() {
 	mappings.emplace("BushEnd", "Plants");
 	mappings.emplace("BushPart", "Plants");
 	mappings.emplace("Canoe", "Transportation");
-	mappings.emplace("Car", "Transportation");
+	mappings.emplace("Car01", "Transportation");
+	mappings.emplace("Car02", "Transportation");
+	mappings.emplace("Car03", "Transportation");
+	mappings.emplace("Car04", "Transportation");
+	mappings.emplace("Car05", "Transportation");
+	mappings.emplace("Car06", "Transportation");
+	mappings.emplace("Car07", "Transportation");
+	mappings.emplace("Car08", "Transportation");
+	mappings.emplace("Car09", "Transportation");
+	mappings.emplace("Car10", "Transportation");
+	mappings.emplace("Car11", "Transportation");
+	mappings.emplace("Car12", "Transportation");
 	mappings.emplace("Chair", "Furniture");
 	mappings.emplace("ChairNew", "Furniture");
 	mappings.emplace("Cone", "Street Objects");
@@ -72,9 +88,10 @@ Mappings::Mappings() {
 	mappings.emplace("TL", "Street Objects");
 	mappings.emplace("Train_Car", "Transportation");
 	mappings.emplace("Train_Engine", "Transportation");
-	mappings.emplace("Tree_Maple", "Plants");
+	mappings.emplace("Maple", "Plants");
 	mappings.emplace("Tree", "Plants");
 	mappings.emplace("TS", "Misc.");
+	mappings.emplace("TS-17", "Misc.");
 	mappings.emplace("WarningPost", "Street Objects");
 	mappings.emplace("WL", "Misc.");
 }
@@ -83,26 +100,6 @@ Mappings::~Mappings() {
 	mappings.clear();
 }
 
-string Mappings::getCulturalCategory(const string &cultural) {
-	string name = extractCulturalTypeFromFilename(cultural);
+string Mappings::getCulturalCategory(string &name) {
 	return mappings.at(name);
-}
-
-string Mappings::extractCulturalTypeFromFilename(const string& filename) {
-	//this method is lacking: for culturals like "Car04_Damaged01" it doesn't work
-	size_t dot = filename.rfind(".");
-	string result = filename.substr(0, dot);
-	size_t lastSlash = result.rfind("\\");
-	result = result.substr(lastSlash + 1, result.length() - lastSlash);
-	size_t junk = result.rfind("-");
-	if (junk != string::npos) {
-		result = result.substr(0, junk);
-		return result;
-	}
-	junk = result.rfind("_");
-	if (junk != string::npos) {
-		result = result.substr(0, junk);
-		return result;
-	}
-	return result;
 }

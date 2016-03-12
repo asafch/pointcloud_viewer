@@ -19,9 +19,12 @@ public:
 		ofVec3f scale);
 	~Object3dModel();
 	void draw();
+	string getFilename();
 	string getName();
+	string extractCulturalTypeFromFilename(const string& filename);
 
 private:
+	string filename;
 	string name;
 	ofxAssimpModelLoader* model;
 	ofMatrix4x4 convertMatrix;
