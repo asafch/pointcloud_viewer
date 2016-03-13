@@ -7,8 +7,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <pcl/features/principal_curvatures.h>
-
 #include "ofxGui.h"
 #include "ofxAssimpModelLoader.h"
 

@@ -43,9 +43,6 @@
     <ClCompile Include="src\OpenFileDialog.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PclMethods.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\targetver.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -279,9 +276,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\OpenFileDialog.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\PclMethods.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\targetver.h">

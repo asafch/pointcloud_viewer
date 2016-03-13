@@ -77,3 +77,23 @@ ofVec3f Cloud::getCloudGlobalCenter() {
 	float z = laserToWorld._mat[2][3];
 	return ofVec3f(x, y, z);
 }
+
+void Cloud::filterByProbability(pcl::PointCloud<pcl::PointXYZ>::Ptr source, pcl::PointCloud<pcl::PointXYZ>::Ptr destination, double threshold) {
+	cout << "Filtering by probability above " << threshold << "%" << endl;
+	int percent = 10;
+	size_t sourceSize = source->points.size();
+	size_t tenth = source->points.size() / 10;
+	size_t counter = 0;
+	for (size_t i = 0; i < sourceSize; i++) {
+		if ((rand() % 100) > threshold)
+			destination->points.push_back(source->points[i]);
+		if (counter == tenth) {
+			counter = 0;
+			cout << "\r" << percent << "%";
+			percent += 10;
+		}
+		else
+			counter++;
+	}
+	cout << endl << "Before: " << source->points.size() << ", After: " << destination->points.size() << endl;
+}

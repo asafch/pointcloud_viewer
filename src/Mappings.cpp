@@ -67,10 +67,12 @@ Mappings::Mappings() {
 	mappings.emplace("Pole", "Street Objects");
 	mappings.emplace("PP", "Misc.");
 	mappings.emplace("PR", "Misc.");
-	mappings.emplace("Props_Bag", "Transportation");
-	mappings.emplace("Props_Bicycle", "Transportation");
-	mappings.emplace("Props_Box", "Misc.");
-	mappings.emplace("Props_Chalkboard", "Misc.");
+	mappings.emplace("Bag", "Transportation");
+	mappings.emplace("Bicycle", "Transportation");
+	mappings.emplace("Bicycle02", "Transportation");
+	mappings.emplace("Bicycle03", "Transportation");
+	mappings.emplace("Box", "Misc.");
+	mappings.emplace("Chalkboard", "Misc.");
 	mappings.emplace("PT", "Phone Booths");
 	mappings.emplace("RecyclingBin", "Street Objects");
 	mappings.emplace("SB", "Furniture");

@@ -197,7 +197,6 @@
     <ClCompile Include="src\Object3dModel.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\OpenFileDialog.cpp" />
-    <ClCompile Include="src\PclMethods.cpp" />
     <ClCompile Include="src\targetver.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +208,6 @@
     <ClInclude Include="include\Object3dModel.h" />
     <ClInclude Include="include\ofApp.h" />
     <ClInclude Include="include\OpenFileDialog.h" />
-    <ClInclude Include="include\PclMethods.h" />
     <ClInclude Include="include\targetver.h" />
     <ClInclude Include="..\..\of\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h" />
     <ClInclude Include="..\..\of\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.h" />

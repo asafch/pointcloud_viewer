@@ -13,7 +13,7 @@ class ofApp;
 #include "Mappings.h"
 #include "Object3dModel.h"
 //#include "ofApp.h"
-#include "PclMethods.h"
+//#include "PclMethods.h"
 
 #define FILTER_PROB 95
 #define CLOUD_CULTURAL_MAX_DISTANCE 65.0
@@ -33,6 +33,7 @@ public:
 	void addModel(Cultural *cultural);
 	void drawModels();
 	ofVec3f getCloudGlobalCenter();
+	void filterByProbability(pcl::PointCloud<pcl::PointXYZ>::Ptr source, pcl::PointCloud<pcl::PointXYZ>::Ptr destination, double threshold);
 
 private:
 	const char *filename;
