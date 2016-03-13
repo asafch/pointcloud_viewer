@@ -19,6 +19,7 @@
 #define NORMAL_RADIUS 0.01
 #define MAX_NUM_OF_CONCURRENT_CLOUDS 3
 #define CULTURALS_LIST "C:\\scans\\transformations\\ALL_CULT.csv"
+#define MOUSE_SENSITIVITY 3
 
 using namespace std;
 
@@ -54,8 +55,6 @@ private:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 	void configViewportFullScreen(ofRectangle & viewport);
-	//void circleResolutionChanged(float newRadius);
-	void drawAxis();
 	void showModelsFunction();
 	void loadScanFunction();
 	void changeMode();
@@ -66,14 +65,11 @@ private:
 	bool mouseTouch;
 	ofTrueTypeFont font;
 	string outputInfo;
-	//ofxIntSlider circleResolution;
 	ofxLabel cameraStatus;
-	ofSoundPlayer ring;
 
 	//known fields
 	Camera camera;
 	ofRectangle viewport3D;
-	//ObjectsLib* objects;
 	Mappings* mappings;
 	vector<string> transformationFiles;
 	unordered_map<string, ofMatrix4x4*> transformations;
@@ -83,10 +79,7 @@ private:
 	ofxToggle showFilteredCloudsToggle;
 	ofxButton showModelsButton;
 	ofxButton loadScanButton;
-	ofxFloatSlider fovSlider;
-	//ofxFloatSlider pointSize;
 	ofxColorSlider color;
-	ofxVec3Slider coordinate;
 	ofxPanel gui;
 	bool showModelsButtonPressed;
 	ofxToggle transportation;
@@ -98,4 +91,6 @@ private:
 	ofxToggle parks;
 	ofxToggle furniture;
 	ofxToggle phoneBooths;
+	float oldX;
+	float oldY;
 };

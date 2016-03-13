@@ -80,9 +80,9 @@ void ofApp::parseTransformations() {
 	transformationFiles.push_back("C:\\scans\\transformations\\Area8LaserVsWorld.csv");
 	cout << "Parsing " << transformationFiles.size() << " transformation files... ";
 	// x, y, z are just temps to calculate the average center of all scans
-	//float x = 0;
-	//float y = 0;
-	//float z = 0;
+	float x = 0;
+	float y = 0;
+	float z = 0;
 	for (vector<string>::iterator file = transformationFiles.begin(); file != transformationFiles.end(); file++) {
 		ifstream input(*file);
 		if (!input.good()) {
@@ -156,17 +156,17 @@ void ofApp::parseTransformations() {
 			end = line.find(",", start + 1);
 			ofMatrix4x4 *transformation = new ofMatrix4x4(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
 			transformations.emplace(name, transformation);
-			//x += a4;
-			//y += b4;
-			//z += c4;
+			x += a4;
+			y += b4;
+			z += c4;
 		}
 		input.close();
 	}
-	//x /= transformations.size();
-	//y /= transformations.size();
-	//z /= transformations.size();
+	x /= transformations.size();
+	y /= transformations.size();
+	z /= transformations.size();
 	cout << "Done: total of " << transformations.size() << " transformations." << endl;
-	//cout << "x: " << x << " , y: " << y << ", z: " << z << endl;
+	cout << "x: " << x << " , y: " << y << ", z: " << z << endl;
 }
 
 bool ofApp::isCategorySelected(string &category) {
@@ -208,32 +208,23 @@ void ofApp::setup() {
 	parseCulturals();
 	mouseTouch = false;
 	ofSetVerticalSync(true);
-	// we add this listener before setting up so the initial circle resolution is correct
-	//pointSize.addListener(this, &ofApp::circleResolutionChanged);
 	ofBackground(0);
 	loadScanButton.addListener(this, &ofApp::loadScanFunction);
-	// Buttons::
-	gui.setup(); // most of the time you don't need a name
+	gui.setup();
 	statusMoveEnum = GLOBAL;
 	gui.add(cameraStatus.setup("Mode", (GLOBAL == statusMoveEnum) ? "Global" : "Local"));
 	gui.add(loadScanButton.setup("Load point cloud", false));
-	gui.add(fovSlider.setup("FOV", 60, 0, 180));
-	//gui.add(pointSize.setup("Point size", 1, 1, 10));
-	//camera.setPosition(3476, 2872, 18);
-	gui.add(coordinate.setup("Coordinate", camera.getGlobalPosition(), ofVec3f(-5000, -5000, -5000), ofVec3f(5000, 5000, 5000)));
 	gui.add(showFilteredCloudsToggle.setup("Filter image", false));
 	gui.add(showModelsButton.setup("Show models", false));
 	showModelsButton.addListener(this, &ofApp::showModelsFunction);
 	outputInfo = "Load scan";
-	//	camera.setAutoDistance(false);
 	camera.setDistance(0.00);
-	camera.setGlobalPosition(coordinate);
-	//bHide = true;
 	configViewportFullScreen(viewport3D);
 	ofEnableSmoothing();
-	//ring.loadSound("ring.wav");
 	camera.setNearClip(2);
 	camera.setFarClip(6000);
+	oldX = viewport3D.getWidth() / 2;
+	oldY = viewport3D.getHeight() / 2;
 }
 
 void ofApp::showModelsFunction() {
@@ -257,8 +248,6 @@ void ofApp::loadScanFunction() {
 	if (clouds.size() < MAX_NUM_OF_CONCURRENT_CLOUDS) {
 		const char* filename = FileHandler::fileLoadDialog();
 		cout << "Loading file: " << filename << endl;
-		//deleteAllObject();
-		//load pcd or gz file
 		string filenameAsString(filename);
 		size_t start = filenameAsString.find_last_of("\\");
 		size_t end = filenameAsString.find_last_of(".");
@@ -278,24 +267,15 @@ void ofApp::loadScanFunction() {
 }
 
 void ofApp::exit() {
-	//segmentPlaneButton.removeListener(this, &ofApp::segmentButtonPressed);
+
 }
 
-//void ofApp::circleResolutionChanged(float newRadius) {
-//	ofSetCircleResolution(newRadius);
-//}
-
 void ofApp::update() {
-	//ofSetCircleResolution(circleResolution);
+
 }
 
 void ofApp::draw() {
-	//Camera Configurations
 	camera.begin(viewport3D);
-	//glPointSize(pointSize);
-	camera.setFov(fovSlider);
-	//camera.setNearClip(2);
-	//camera.setFarClip(6000);
 	for (vector<Cloud*>::iterator cloud = clouds.begin(); cloud != clouds.end(); cloud++) {
 		ofPushMatrix();
 		ofMultMatrix(ofMatrix4x4::getTransposedOf((*cloud)->getLaserToWorld()));
@@ -306,7 +286,6 @@ void ofApp::draw() {
 				(*cloud)->drawModels();
 			else {
 				cout << "You have to load a scan before rendering models" << endl;
-				//showModelsButton = false;
 			}
 		if (showFilteredCloudsToggle)
 			(*cloud)->getFilteredCloudMesh()->draw();
@@ -353,40 +332,6 @@ void ofApp::keyPressed(int key) {
 			camera.pan(-3);
 			break;
 	}
-	//if (key == 'm')
-	//{
-	//	if (GLOBAL == statusMoveEnum)
-	//	{
-	//		statusMoveEnum = LOCAL;
-	//		cameraStatus = "Local";
-	//	}
-	//	else
-	//	{
-	//		statusMoveEnum = GLOBAL;
-	//		cameraStatus = "Global";
-	//	}
-	//}
-	//if (key == OF_KEY_F3)
-	//{
-	//	fov = fov + (180 - fov) / 60;
-	//}
-
-	//if (key == OF_KEY_F2)
-	//{
-	//	fov = fov - (fov) / 60;;
-	//}
-	//if (key == 'h') {
-	//	bHide = !bHide;
-	//}
-	//if (key == 's') {
-	//	gui.saveToFile("settings.xml");
-	//}
-	//if (key == 'l') {
-	//	gui.loadFromFile("settings.xml");
-	//}
-	//if (key == ' ') {
-	//	color = ofColor(255);
-	//}
 }
 
 void ofApp::keyReleased(int key) {
@@ -398,19 +343,22 @@ void ofApp::mouseMoved(int x, int y) {
 }
 
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY) {
-	if (scrollY < 0)
-		//fov = fov + (95 - fov) / (-scrollY * 10);
-		fovSlider = fovSlider + 1;
+	//move forward
 	if (scrollY > 0)
-		//fov = fov - (fov) / (scrollY * 10);
-		fovSlider = fovSlider - 1;
+		camera.dolly(-10);
+	//move backwards
+	else
+		camera.dolly(10);
 }
 
 void ofApp::mouseDragged(int x, int y, int button) {
-	//if (recPaint)
-	//{
-	//	cropSecond.x = x;
-	//	cropSecond.y = y;
+	//if (abs(x - oldX) > MOUSE_SENSITIVITY) {
+	//	camera.pan((x - oldX < 0 ? -1 : 1) * 3);
+	//	x = oldX;
+	//}
+	//if (abs(y - oldY) > MOUSE_SENSITIVITY) {
+	//	camera.tilt((y - oldY < 0 ? -1 : 1) * 3);
+	//	y = oldY;
 	//}
 }
 
@@ -419,7 +367,6 @@ void ofApp::mousePressed(int x, int y, int button) {
 }
 
 void ofApp::mouseReleased(int x, int y, int button) {
-	coordinate = camera.getGlobalPosition();
 	mouseTouch = false;
 }
 
@@ -433,20 +380,6 @@ void ofApp::gotMessage(ofMessage msg) {
 
 void ofApp::dragEvent(ofDragInfo dragInfo) {
 
-}
-
-void ofApp::drawAxis() {
-	ofVec3f vec[2 * 3];
-	ofVec3f *xAxe = &vec[0], *yAxe = &vec[2], *zAxe = &vec[4];
-	xAxe[0].set(0, 0, 0);
-	xAxe[1].set(1, 0, 0);
-	yAxe[0].set(0, 0, 0);
-	yAxe[1].set(0, 1, 0);
-	zAxe[0].set(0, 0, 0);
-	zAxe[1].set(0, 0, 1);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, sizeof(ofVec3f), &vec[0].x);
-	glDrawArrays(GL_LINES, 0, 6);
 }
 
 void ofApp::changeMode() {
