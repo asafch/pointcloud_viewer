@@ -54,7 +54,7 @@ private:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 	void configViewportFullScreen(ofRectangle & viewport);
-	void circleResolutionChanged(int & circleResolution);
+	//void circleResolutionChanged(float newRadius);
 	void drawAxis();
 	void showModelsFunction();
 	void loadScanFunction();
@@ -66,7 +66,7 @@ private:
 	bool mouseTouch;
 	ofTrueTypeFont font;
 	string outputInfo;
-	ofxIntSlider circleResolution;
+	//ofxIntSlider circleResolution;
 	ofxLabel cameraStatus;
 	ofSoundPlayer ring;
 
@@ -83,8 +83,8 @@ private:
 	ofxToggle showFilteredCloudsToggle;
 	ofxButton showModelsButton;
 	ofxButton loadScanButton;
-	ofxFloatSlider fov;
-	ofxFloatSlider pointSize;
+	ofxFloatSlider fovSlider;
+	//ofxFloatSlider pointSize;
 	ofxColorSlider color;
 	ofxVec3Slider coordinate;
 	ofxPanel gui;

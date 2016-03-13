@@ -209,17 +209,16 @@ void ofApp::setup() {
 	mouseTouch = false;
 	ofSetVerticalSync(true);
 	// we add this listener before setting up so the initial circle resolution is correct
-	//	circleResolution.addListener(this, &ofApp::circleResolutionChanged);
+	//pointSize.addListener(this, &ofApp::circleResolutionChanged);
 	ofBackground(0);
-	//loadStlButton.addListener(this, &ofApp::loadStlFunction);
 	loadScanButton.addListener(this, &ofApp::loadScanFunction);
 	// Buttons::
 	gui.setup(); // most of the time you don't need a name
 	statusMoveEnum = GLOBAL;
 	gui.add(cameraStatus.setup("Mode", (GLOBAL == statusMoveEnum) ? "Global" : "Local"));
 	gui.add(loadScanButton.setup("Load point cloud", false));
-	gui.add(fov.setup("FOV", 60, 0, 180));
-	gui.add(pointSize.setup("Point size", 1, 1, 10));
+	gui.add(fovSlider.setup("FOV", 60, 0, 180));
+	//gui.add(pointSize.setup("Point size", 1, 1, 10));
 	//camera.setPosition(3476, 2872, 18);
 	gui.add(coordinate.setup("Coordinate", camera.getGlobalPosition(), ofVec3f(-5000, -5000, -5000), ofVec3f(5000, 5000, 5000)));
 	gui.add(showFilteredCloudsToggle.setup("Filter image", false));
@@ -270,7 +269,7 @@ void ofApp::loadScanFunction() {
 		for (vector<Cultural*>::iterator cultural = culturals.begin(); cultural != culturals.end(); cultural++) {
 			cloud->addModel(*cultural);
 		}
-		cout << "Done." << endl;
+		cout << "Done." << endl << endl;
 		clouds.push_back(cloud);
 	}
 	else {
@@ -282,9 +281,9 @@ void ofApp::exit() {
 	//segmentPlaneButton.removeListener(this, &ofApp::segmentButtonPressed);
 }
 
-void ofApp::circleResolutionChanged(int & circleResolution) {
-	//ofSetCircleResolution(circleResolution);
-}
+//void ofApp::circleResolutionChanged(float newRadius) {
+//	ofSetCircleResolution(newRadius);
+//}
 
 void ofApp::update() {
 	//ofSetCircleResolution(circleResolution);
@@ -293,8 +292,8 @@ void ofApp::update() {
 void ofApp::draw() {
 	//Camera Configurations
 	camera.begin(viewport3D);
-	glPointSize(pointSize);
-	camera.setFov(fov);
+	//glPointSize(pointSize);
+	camera.setFov(fovSlider);
 	//camera.setNearClip(2);
 	//camera.setFarClip(6000);
 	for (vector<Cloud*>::iterator cloud = clouds.begin(); cloud != clouds.end(); cloud++) {
@@ -320,61 +319,78 @@ void ofApp::draw() {
 }
 
 void ofApp::keyPressed(int key) {
-	if (key == 'm')
-	{
-		if (GLOBAL == statusMoveEnum)
-		{
-			statusMoveEnum = LOCAL;
-			cameraStatus = "Local";
-		}
-		else
-		{
-			statusMoveEnum = GLOBAL;
-			cameraStatus = "Global";
-		}
+	switch (key) {
+		//move forward
+		case 'w':
+			camera.dolly(-10);
+			break;
+		//move left
+		case 'a':
+			camera.truck(-10);
+			break;
+		//move backwards
+		case 's':
+			camera.dolly(10);
+			break;
+		//move right
+		case 'd':
+			camera.truck(10);
+			break;
+		//move upwards
+		case 'W':
+			camera.boom(10);
+			break;
+		//move downwards
+		case 'S':
+			camera.boom(-10);
+			break;
+		//pan counter-clockwise
+		case 'D':
+			camera.pan(3);
+			break;
+		//pan clockwise
+		case 'A':
+			camera.pan(-3);
+			break;
 	}
-	if (key == OF_KEY_F3)
-	{
-		fov = fov + (180 - fov) / 60;
-	}
+	//if (key == 'm')
+	//{
+	//	if (GLOBAL == statusMoveEnum)
+	//	{
+	//		statusMoveEnum = LOCAL;
+	//		cameraStatus = "Local";
+	//	}
+	//	else
+	//	{
+	//		statusMoveEnum = GLOBAL;
+	//		cameraStatus = "Global";
+	//	}
+	//}
+	//if (key == OF_KEY_F3)
+	//{
+	//	fov = fov + (180 - fov) / 60;
+	//}
 
-	if (key == OF_KEY_F2)
-	{
-		fov = fov - (fov) / 60;;
-	}
-	if (key == 'h') {
-		bHide = !bHide;
-	}
+	//if (key == OF_KEY_F2)
+	//{
+	//	fov = fov - (fov) / 60;;
+	//}
+	//if (key == 'h') {
+	//	bHide = !bHide;
+	//}
 	//if (key == 's') {
 	//	gui.saveToFile("settings.xml");
 	//}
-	if (key == 'l') {
-		gui.loadFromFile("settings.xml");
-	}
-	if (key == ' ') {
-		color = ofColor(255);
-	}
+	//if (key == 'l') {
+	//	gui.loadFromFile("settings.xml");
+	//}
+	//if (key == ' ') {
+	//	color = ofColor(255);
+	//}
 }
 
 void ofApp::keyReleased(int key) {
-	switch (key) {
-	case 'w':
-		glTranslatef(0, 0, -10);
-		cout << "w" << endl;
-		break;
-	case 'a':
-		glTranslatef(-10, 0, 0);
-		cout << "a" << endl;
-		break;
-	case 's':
-		glTranslatef(0, 0, 10);
-		cout << "s" << endl;
-		break;
-	case 'd':
-		glTranslatef(10, 0, 0);
-		cout << "d" << endl;
-		break;
-	}
+
 }
 
 void ofApp::mouseMoved(int x, int y) {
@@ -383,10 +399,11 @@ void ofApp::mouseMoved(int x, int y) {
 
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY) {
 	if (scrollY < 0)
-		fov = fov + (95 - fov) / (-scrollY * 10);
-
+		//fov = fov + (95 - fov) / (-scrollY * 10);
+		fovSlider = fovSlider + 1;
 	if (scrollY > 0)
-		fov = fov - (fov) / (scrollY * 10);
+		//fov = fov - (fov) / (scrollY * 10);
+		fovSlider = fovSlider - 1;
 }
 
 void ofApp::mouseDragged(int x, int y, int button) {
@@ -404,7 +421,6 @@ void ofApp::mousePressed(int x, int y, int button) {
 void ofApp::mouseReleased(int x, int y, int button) {
 	coordinate = camera.getGlobalPosition();
 	mouseTouch = false;
-
 }
 
 void ofApp::windowResized(int w, int h) {
@@ -432,6 +448,7 @@ void ofApp::drawAxis() {
 	glVertexPointer(3, GL_FLOAT, sizeof(ofVec3f), &vec[0].x);
 	glDrawArrays(GL_LINES, 0, 6);
 }
+
 void ofApp::changeMode() {
 
 }

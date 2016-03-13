@@ -82,7 +82,7 @@ void Cloud::filterByProbability(pcl::PointCloud<pcl::PointXYZ>::Ptr source, pcl:
 	cout << "Filtering by probability above " << threshold << "%" << endl;
 	int percent = 10;
 	size_t sourceSize = source->points.size();
-	size_t tenth = source->points.size() / 10;
+	size_t tenth = source->points.size() / 10 - 1;
 	size_t counter = 0;
 	for (size_t i = 0; i < sourceSize; i++) {
 		if ((rand() % 100) > threshold)

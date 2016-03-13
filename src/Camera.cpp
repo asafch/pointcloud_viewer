@@ -68,11 +68,11 @@ void Camera::begin(ofRectangle viewport){
 void Camera::reset(){
 	target.resetTransform();
 	
-	target.setPosition(0, 0, 0);
+	target.setPosition(3476, 2872, 18);
 	lookAt(target);
 	
 	resetTransform();
-	setPosition(0, 0, 0);
+	setPosition(3476, 2872, 18);
 	
 		
 	xRot = 0;
