@@ -174,28 +174,28 @@ bool ofApp::isCategorySelected(string &category) {
 		return transportation == true;
 	}
 	if (category.compare("Street Objects") == 0) {
-		return transportation == true;
+		return streetObjects == true;
 	}
 	if (category.compare("Bus Stations") == 0) {
-		return transportation == true;
+		return busStations == true;
 	}
 	if (category.compare("Plants") == 0) {
-		return transportation == true;
+		return plants == true;
 	}
 	if (category.compare("Construction & Buildings") == 0) {
-		return transportation == true;
+		return constructionAndBuildings == true;
 	}
 	if (category.compare("Misc.") == 0) {
-		return transportation == true;
+		return misc == true;
 	}
 	if (category.compare("Parks") == 0) {
-		return transportation == true;
+		return parks == true;
 	}
 	if (category.compare("Furniture") == 0) {
-		return transportation == true;
+		return furniture == true;
 	}
 	if (category.compare("Phone Booths") == 0) {
-		return transportation == true;
+		return phoneBooths == true;
 	}
 	cout << "Error: a non-existent category was requested for toggle check" << endl;
 	return false;

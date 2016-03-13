@@ -17,7 +17,6 @@
 #include "Cultural.h"
 #include "FileHandler.h"
 #include "Mappings.h"
-#include "ObjectsLib.h"
 
 #define NORMAL_RADIUS 0.01
 #define MAX_NUM_OF_CONCURRENT_CLOUDS 3
