@@ -80,9 +80,9 @@ void ofApp::parseTransformations() {
 	transformationFiles.push_back("C:\\scans\\transformations\\Area8LaserVsWorld.csv");
 	cout << "Parsing " << transformationFiles.size() << " transformation files... ";
 	// x, y, z are just temps to calculate the average center of all scans
-	float x = 0;
-	float y = 0;
-	float z = 0;
+	//float x = 0;
+	//float y = 0;
+	//float z = 0;
 	for (vector<string>::iterator file = transformationFiles.begin(); file != transformationFiles.end(); file++) {
 		ifstream input(*file);
 		if (!input.good()) {
@@ -156,17 +156,17 @@ void ofApp::parseTransformations() {
 			end = line.find(",", start + 1);
 			ofMatrix4x4 *transformation = new ofMatrix4x4(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
 			transformations.emplace(name, transformation);
-			x += a4;
-			y += b4;
-			z += c4;
+			//x += a4;
+			//y += b4;
+			//z += c4;
 		}
 		input.close();
 	}
-	x /= transformations.size();
-	y /= transformations.size();
-	z /= transformations.size();
+	//x /= transformations.size();
+	//y /= transformations.size();
+	//z /= transformations.size();
 	cout << "Done: total of " << transformations.size() << " transformations." << endl;
-	cout << "x: " << x << " , y: " << y << ", z: " << z << endl;
+	//cout << "x: " << x << " , y: " << y << ", z: " << z << endl;
 }
 
 bool ofApp::isCategorySelected(string &category) {

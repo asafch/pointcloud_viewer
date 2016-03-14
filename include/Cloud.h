@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+All of the class's documentation is within Cloud.cpp
+*/
+
 class ofApp;
 
 #include "ofMain.h"
@@ -12,8 +16,6 @@ class ofApp;
 #include "Cultural.h"
 #include "Mappings.h"
 #include "Object3dModel.h"
-//#include "ofApp.h"
-//#include "PclMethods.h"
 
 #define FILTER_PROB 95
 #define CLOUD_CULTURAL_MAX_DISTANCE 65.0

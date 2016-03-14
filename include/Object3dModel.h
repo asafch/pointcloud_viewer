@@ -1,4 +1,9 @@
 #pragma once
+
+/*
+All of the class's documentation is within Object3dModel.cpp
+*/
+
 #include <string>
 #include <vector>
 
@@ -11,6 +16,7 @@
 #define PATH_SUFFIX ".stl"
 
 class Object3dModel {
+
 public:
 	Object3dModel::Object3dModel(string &filename,
 		ofMatrix4x4 convertMatrix,
@@ -28,19 +34,16 @@ private:
 	string name;
 	ofxAssimpModelLoader* model;
 	ofMatrix4x4 convertMatrix;
-	float localX;
-	float localY;
-	float localZ;
-	float qX;
-	float qY;
-	float qZ; 
-	float qW;
-	float sX;
-	float sY;
-	float sZ;
-	float sW;
-	int r;
-	int g;
-	int b;
+	float translationX;
+	float translationY;
+	float translationZ;
+	float Q1;
+	float Q2;
+	float Q3; 
+	float Q4;
+	float scaleX;
+	float scaleY;
+	float scaleZ;
+
 };
 

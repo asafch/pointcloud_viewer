@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+All of the class's documentation is within Cultural.cpp
+*/
+
 #include <string>
 
 #include "ofVec3f.h"

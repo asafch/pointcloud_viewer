@@ -1,5 +1,10 @@
 #include "../include/Object3dModel.h"
 
+/*
+This object describes one model in one cloud.
+It holds all of the relevant transformation data, along with the full path to the .stl file which holds the model's 3D data. The 3D model is hold in an instance of ofxAssimpModelLoader.
+*/
+
 Object3dModel::Object3dModel(string &filename,
 							ofMatrix4x4 convertMatrix,
 							ofVec3f translation,
@@ -14,26 +19,17 @@ Object3dModel::Object3dModel(string &filename,
 	string fullPath = PATH_PREFIX + temp + PATH_SUFFIX;
 	this->name = extractCulturalTypeFromFilename(fullPath);
 	model->loadModel(fullPath);
-	//this->convertMatrix = convertMatrix;
 	this->convertMatrix = convertMatrix.getTransposedOf(convertMatrix);
-	//aiVector3D newXYZ = convertMatrix * aiVector3D(x, y, z);
-	//localX = newXYZ.x;
-	//localY = newXYZ.y;
-	//localZ = newXYZ.z;
-	localX = translation[0];
-	localY = translation[1];
-	localZ = translation[2];
-	qX = rotation[0];
-	qY = rotation[1];
-	qZ = rotation[2];
-	qW = rotation[3];
-	sX = scale[0];
-	sY = scale[1];
-	sZ = scale[2];
-	//r = 60 + rand() % 20;
-	//g = 60 + rand() % 100;
-	//b = 60 + rand() % 100;
-
+	translationX = translation[0];
+	translationY = translation[1];
+	translationZ = translation[2];
+	Q1 = rotation[0];
+	Q2 = rotation[1];
+	Q3 = rotation[2];
+	Q4 = rotation[3];
+	scaleX = scale[0];
+	scaleY = scale[1];
+	scaleZ = scale[2];
 }
 
 Object3dModel::~Object3dModel() {
@@ -42,14 +38,13 @@ Object3dModel::~Object3dModel() {
 
 void Object3dModel::draw() {
 	ofPushMatrix();
-	//ofLoadIdentityMatrix();
-	ofQuaternion qaut(qX, qY, qZ, qW);
+	ofQuaternion qaut(Q1, Q2, Q3, Q4);
 	ofVec3f qaxis;
 	float qangle;
 	qaut.getRotate(qangle, qaxis);
-	model->setPosition(localX, localY, localZ);
+	model->setPosition(translationX, translationY, translationZ);
 	model->setRotation(0, qangle, qaxis.x, qaxis.y, qaxis.z);
-	model->setScale(sX, sY, sZ);
+	model->setScale(scaleX, scaleY, scaleZ);
 	ofSetColor(0, 200, 200, 156);
 	model->updateMatrix(convertMatrix);
 	model->drawFaces();

@@ -68,11 +68,12 @@ void Camera::begin(ofRectangle viewport){
 void Camera::reset(){
 	target.resetTransform();
 	
-	target.setPosition(3476, 2872, 18);
+	//(2282, 1593, 20) is the average center of all of the clouds
+	target.setPosition(2282, 1593, 20);
 	lookAt(target);
 	
 	resetTransform();
-	setPosition(3476, 2872, 18);
+	setPosition(2282, 1593, 20);
 	
 		
 	xRot = 0;

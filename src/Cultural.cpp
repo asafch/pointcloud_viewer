@@ -1,5 +1,9 @@
 #include "../include/Cultural.h"
 
+/*
+No special documentation required.
+*/
+
 Cultural::Cultural(string name,
 	float translationX,
 	float translationY,

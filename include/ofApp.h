@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+All of the class's documentation is within ofApp.cpp
+*/
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -35,7 +39,6 @@ public:
 	bool isCategorySelected(string &category);
 
 private:
-	//methods
 	// should a destructor be implemented?
 	//virtual ~ofApp();
 	void parseCulturals();
@@ -59,15 +62,12 @@ private:
 	void loadScanFunction();
 	void changeMode();
 
-	// what are these fields?
 	enum STATUS_MOVE { GLOBAL = 0, LOCAL = 1 } statusMoveEnum;
 	bool bHide;
 	bool mouseTouch;
 	ofTrueTypeFont font;
 	string outputInfo;
 	ofxLabel cameraStatus;
-
-	//known fields
 	Camera camera;
 	ofRectangle viewport3D;
 	Mappings* mappings;

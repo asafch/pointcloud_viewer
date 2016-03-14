@@ -85,6 +85,17 @@ void ofxAssimpModelLoader::updateMatrix(ofMatrix4x4 mat) {
 	modelMatrix.makeFromMultiplicationOf(modelMatrix, mat);
 }
 ```
+9. You'll have to change some hard-coded paths in certain files in order for this to work properly.
+10. Cloud input files are assumed to be in `.gszf` format.
+11. Cultural models transformation files are assumed to be in `.csv` format, and their actual content in a certain format.
+12. Same goes for the transofrmation files that depict the clouds' transformations from local spaces to global space.
+
+## Usage
+1. Load the app.
+2. Wait 1-2 minutes for all of the transformation files and cultural models to be loaded.
+3. Load a cloud, this takes 1-2 minutes.
+4. You can change the camera's orientation with the mouse while left-clicking.
+5. You can move the camera's position with w-a-s-d like in an FPS game. You can move the camera up\down with W\S and pan it counter\clockwise with A\D.
 
 ## Credits
 The app is based on [Natan Elul](mailto:eluln@post.bgu.ac.il )'s original project, with assistance from [Fanglin Gu](mailto:gfl699468@gmail.com).

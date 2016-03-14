@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+All of the class's documentation is within Mappings.cpp
+*/
+
 #include <iostream>
 #include <string>
 #include <unordered_map>
