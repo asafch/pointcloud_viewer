@@ -74,12 +74,19 @@ $(PCL_ROOT)\3rdParty\VTK\lib;
 
 6. Furthermore, the project should be launched from within VS2015 in `x64, Debug` configuration.
 
-7. Add to the file `$(OPEN_FRAMEWORKS)\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.h` the following method declaration:
-
-    `void updateMatrix(ofMatrix4x4 mat);`
-
-8. ...and add its implementation to the file `$(OPEN_FRAMEWORKS)\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.cpp`:
-
+7. Add to the file
+```
+$(OPEN_FRAMEWORKS)\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.h
+```
+the following method declaration:
+```
+void updateMatrix(ofMatrix4x4 mat);
+```
+8. ...and add its implementation to the file
+```
+$(OPEN_FRAMEWORKS)\addons\ofxAssimpModelLoader\src\ofxAssimpModelLoader.cpp
+```
+:
 ```
 void ofxAssimpModelLoader::updateMatrix(ofMatrix4x4 mat) {
 	modelMatrix.makeFromMultiplicationOf(modelMatrix, mat);
@@ -88,7 +95,7 @@ void ofxAssimpModelLoader::updateMatrix(ofMatrix4x4 mat) {
 9. You'll have to change some hard-coded paths in certain files in order for this to work properly.
 10. Cloud input files are assumed to be in `.gszf` format.
 11. Cultural models transformation files are assumed to be in `.csv` format, and their actual content in a certain format.
-12. Same goes for the transofrmation files that depict the clouds' transformations from local spaces to global space.
+12. Same goes for the transformation files that depict the clouds' transformations from local spaces to global space.
 
 ## Usage
 1. Load the app.
